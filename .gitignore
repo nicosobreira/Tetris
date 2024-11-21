@@ -1,3 +1,6 @@
+# Custom
+*.vim
+
 # Compiled Lua sources
 luac.out
 
