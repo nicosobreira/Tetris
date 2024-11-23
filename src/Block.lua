@@ -26,8 +26,10 @@ function Block:rotate()
 	local len = #self.shape
 	for i = 1, len do
 		for j = i + 1, len do
-			self.shape[i][j] = self.shape[j][i]
-			self.shape[j][i] = self.shape[i][j]
+			local tmp1 = self.shape[i][j]
+			local tmp2 = self.shape[j][i]
+			self.shape[i][j] = tmp2
+			self.shape[j][i] = tmp1
 		end
 	end
 end
