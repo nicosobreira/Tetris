@@ -13,6 +13,15 @@ local function randomKey(tbl)
 	return key
 end
 
+-- local function reverseT(tbl)
+-- 	local reversedTable = {}
+-- 	local len = #tbl
+-- 	for index, value in ipairs(tbl) do
+-- 		reversedTable[len + 1 - index] = value
+-- 	end
+-- 	return reversedTable
+-- end
+
 Block = {
 	size = 0,
 	pos = {
@@ -47,8 +56,16 @@ function Block.newRandom(x, y, size)
 	return self
 end
 
-function Block:rotate()
-	matrix.transposeM(self.shape)
+function Block:rotate(direction)
+	if direction == 1 then
+		-- Rotate clockwise
+		matrix.transposeM(self.shape)
+		matrix.reverseM(self.shape)
+	else
+		-- Rotate counterclockwise
+		matrix.reverseM(self.shape)
+		matrix.transposeM(self.shape)
+	end
 end
 
 function Block:merge(matrix_to_merge)

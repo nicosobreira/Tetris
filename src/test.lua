@@ -21,13 +21,16 @@ end
 local function reverseTable(tbl)
 	local reversedTable = {}
 	local len = #tbl
-	for index, value in ipairs(tbl) do
-		reversedTable[len + 1 - index] = value
+	local tmp
+	for index = 1, len // 2 do
+		tmp = tbl[index]
 	end
 	return reversedTable
 end
-
-local tbl = { "a", "b", "c" }
+local tbl = { "4", "10", "3" }
 printT(tbl)
-local reversed = reverseTable(tbl)
-printT(reversed)
+table.sort(tbl, function(a, b)
+	return a > b
+end)
+-- local reversed = reverseTable(tbl)
+printT(tbl)

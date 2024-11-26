@@ -1,6 +1,17 @@
 local love = require("love")
 local sprites = require("modules.sprites")
 
+local function reverseT(tbl)
+	if tbl and #tbl > 1 then
+		local temp = nil
+		for n = 1, math.floor(#tbl / 2) do
+			temp = tbl[n]
+			tbl[n] = tbl[#tbl - (n - 1)]
+			tbl[#tbl - (n - 1)] = temp
+		end
+	end
+end
+
 local M = {}
 
 function M.printM(matrix)
@@ -62,13 +73,10 @@ function M.transposeM(matrix)
 	end
 end
 
-function M.reverseT(tbl)
-	local reversedTable = {}
-	local len = #tbl
-	for index, value in ipairs(tbl) do
-		reversedTable[len + 1 - index] = value
+function M.reverseM(matrix)
+	for j, _ in ipairs(matrix) do
+		reverseT(matrix[j])
 	end
-	return reversedTable
 end
 
 return M
