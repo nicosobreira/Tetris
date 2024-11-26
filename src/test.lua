@@ -1,12 +1,9 @@
-local shapes = require("shapes")
+local shapes = require("modules.shapes")
+-- local matrix = require("modules.matrix")
 
-local function printM(matrix)
-	for _, column in ipairs(matrix) do
-		for _, line in ipairs(column) do
-			io.write(line)
-			io.write(" ")
-		end
-		print()
+local function printT(tbl)
+	for _, element in ipairs(tbl) do
+		io.write(element .. " ")
 	end
 	print()
 end
@@ -21,8 +18,16 @@ local function randomKey(tbl)
 	return key
 end
 
-math.randomseed(os.time())
+local function reverseTable(tbl)
+	local reversedTable = {}
+	local len = #tbl
+	for index, value in ipairs(tbl) do
+		reversedTable[len + 1 - index] = value
+	end
+	return reversedTable
+end
 
-local random_key = randomKey(shapes)
-print("random_key = " .. random_key)
-printM(shapes[random_key])
+local tbl = { "a", "b", "c" }
+printT(tbl)
+local reversed = reverseTable(tbl)
+printT(reversed)

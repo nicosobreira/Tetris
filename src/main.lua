@@ -1,14 +1,24 @@
 local love = require("love")
-require("Block")
-local shape = require("Shape.lua")
+local shapes = require("modules.shapes")
+local matrix = require("modules.matrix")
+require("classes.Block")
 
-CELLSIZE = 32
+CELLSIZE = 16
 
-function love.load() end
+function love.load()
+	math.randomseed(os.time())
+
+	love.window.setTitle("Tetris")
+	-- current_block = Block.newRandom(5, 5, CELLSIZE)
+	current_block = Block.new(5, 5, shapes.l, CELLSIZE)
+	Arena = matrix.newM(10, 20)
+	current_block:merge(Arena)
+end
 
 function love.keypressed(key)
 	if key == "d" then
-		l_block:rotate()
+		current_block:rotate()
+		current_block:merge(Arena)
 	elseif key == "escape" then
 		love.event.quit()
 	end
@@ -17,6 +27,7 @@ end
 function love.update() end
 
 function love.draw()
-	-- o_block:draw()
-	l_block:draw()
+	os.execute("clear")
+	matrix.printM(Arena)
+	matrix.drawM(Arena, 10, 10, CELLSIZE)
 end
