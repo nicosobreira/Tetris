@@ -15,17 +15,17 @@ function Arena.__index(_, key)
 	return Arena[key]
 end
 
-function Arena.new(x, y, sx, sy)
+function Arena.new(x, y, width, height)
 	local self = setmetatable({}, Arena)
 
 	self.pos = { x = x, y = y }
-	self.matrix = matrix.newM(sx, sy)
+	self.matrix = matrix.newM(width, height)
 
 	return self
 end
 
 function Arena:merge(shape)
-	matrix.mergeM(self.matrix, shape, self.x, self.y)
+	matrix.mergeM(self.matrix, shape, self.pos.x, self.pos.y)
 end
 
 function Arena:draw()

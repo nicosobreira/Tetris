@@ -2,6 +2,7 @@ local love = require("love")
 local shapes = require("modules.shapes")
 local matrix = require("modules.matrix")
 require("classes.Block")
+require("classes.Arena")
 require("cellsize")
 
 local function blockKeypress(key)
@@ -14,17 +15,18 @@ local function blockKeypress(key)
 	elseif key == "q" then
 		Current_block:rotate(-1)
 	end
-	Current_block:merge(Arena)
+	myArena:merge(Current_block)
 end
 
 function love.load()
+	love.window.setTitle("Tetris")
+
 	math.randomseed(os.time())
 
-	love.window.setTitle("Tetris")
 	-- current_block = Block.newRandom(5, 5, CELLSIZE)
-	Current_block = Block.new(5, 5, shapes.l, CELLSIZE)
-	Arena = matrix.newM(10, 20)
-	Current_block:merge(Arena)
+	Current_block = Block.new(5, 5, shapes.l)
+	myArena = Arena.new(0, 0, 10, 20)
+	myArena:merge(Current_block)
 end
 
 function love.keypressed(key)
@@ -38,6 +40,6 @@ function love.update() end
 
 function love.draw()
 	os.execute("clear")
-	matrix.printM(Arena)
-	matrix.drawM(Arena, 10, 10, CELLSIZE)
+	matrix.printM(Arena.matrix)
+	myArena:draw()
 end

@@ -60,10 +60,10 @@ function Block:rotate(direction)
 	if direction == 1 then
 		-- Rotate clockwise
 		matrix.transposeM(self.shape)
-		matrix.reverseM(self.shape)
+		matrix.reverseLineM(self.shape)
 	else
 		-- Rotate counterclockwise
-		matrix.reverseM(self.shape)
+		matrix.reverseLineM(self.shape)
 		matrix.transposeM(self.shape)
 	end
 end

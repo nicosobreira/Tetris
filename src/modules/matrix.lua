@@ -62,7 +62,7 @@ function M.transposeM(matrix)
 	end
 end
 
-function M.reverseM(matrix)
+function M.reverseLineM(matrix)
 	for j, _ in ipairs(matrix) do
 		reverseT(matrix[j])
 	end
