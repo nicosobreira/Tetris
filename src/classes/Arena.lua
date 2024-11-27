@@ -1,13 +1,13 @@
+local love = require("love")
+local matrix = require("modules.matrix")
+local sprites = require("modules.sprites")
+
 Arena = {
-	cellsize = 0,
 	pos = {
 		x = 0,
 		y = 0,
 	},
-	size = {
-		x = 0,
-		y = 0,
-	},
+	cellsize = 0,
 	matrix = {},
 }
 
@@ -20,8 +20,21 @@ function Arena.new(x, y, sx, sy, cellsize)
 
 	self.cellsize = cellsize
 	self.pos = { x = x, y = y }
-	self.size = { x = sx, y = sy }
-	self.shape = shape
+	self.matrix = matrix.newM(sx, sy)
 
 	return self
+end
+
+function Arena:merge(shape)
+	matrix.mergeM(self.matrix, shape, self.x, self.y)
+end
+
+function Arena:draw()
+	for j, column in ipairs(self.matrix) do
+		for i, element in ipairs(column) do
+			if element ~= 0 and element <= #sprites then
+				love.graphics.draw(sprites[element], self.pos.x + (self.cellsize * i), self.pos.y + (self.cellsize * j))
+			end
+		end
+	end
 end
