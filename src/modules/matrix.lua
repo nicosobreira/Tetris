@@ -14,17 +14,6 @@ end
 
 local M = {}
 
-function M.printM(matrix)
-	for _, column in ipairs(matrix) do
-		for _, element in ipairs(column) do
-			io.write(element)
-			io.write(" ")
-		end
-		print()
-	end
-	print()
-end
-
 function M.newM(width, height)
 	width = width or 1
 	height = height or 1
@@ -37,6 +26,17 @@ function M.newM(width, height)
 	end
 
 	return matrix
+end
+
+function M.printM(matrix)
+	for _, column in ipairs(matrix) do
+		for _, element in ipairs(column) do
+			io.write(element)
+			io.write(" ")
+		end
+		print()
+	end
+	print()
 end
 
 function M.drawM(matrix, x, y, cellsize)
