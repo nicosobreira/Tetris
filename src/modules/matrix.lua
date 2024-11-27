@@ -1,6 +1,3 @@
-local love = require("love")
-local sprites = require("modules.sprites")
-
 local function reverseT(tbl)
 	if tbl and #tbl > 1 then
 		local temp = nil
@@ -39,16 +36,6 @@ function M.printM(matrix)
 		print()
 	end
 	print()
-end
-
-function M.drawM(matrix, x, y, cellsize)
-	for j, column in ipairs(matrix) do
-		for i, element in ipairs(column) do
-			if element ~= 0 and element <= #sprites then
-				love.graphics.draw(sprites[element], x + (cellsize * i), y + (cellsize * j))
-			end
-		end
-	end
 end
 
 function M.mergeM(matrix1, matrix2, x, y)

@@ -2,8 +2,7 @@ local love = require("love")
 local shapes = require("modules.shapes")
 local matrix = require("modules.matrix")
 require("classes.Block")
-
-CELLSIZE = 16
+require("cellsize")
 
 local function blockKeypress(key)
 	if key == "a" then
