@@ -67,25 +67,3 @@ function Block:rotate(direction)
 		matrix.transposeM(self.shape)
 	end
 end
-
-function Block:merge(matrix_to_merge)
-	matrix.mergeM(matrix_to_merge, self.shape, self.pos.x, self.pos.y)
-end
-
--- function Block:draw()
--- 	love.graphics.setColor(color.BLUE)
--- 	for j, column in ipairs(self.shape) do
--- 		for i, line in ipairs(column) do
--- 			if line ~= 0 then
--- 				love.graphics.rectangle(
--- 					"fill",
--- 					self.pos.x + (i * self.pos.x),
--- 					self.pos.y + (j * self.pos.y),
--- 					self.size,
--- 					self.size
--- 				)
--- 			end
--- 		end
--- 	end
--- 	love.graphics.setColor(color.WHITE)
--- end
