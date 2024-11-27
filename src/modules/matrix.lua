@@ -14,6 +14,8 @@ end
 
 local M = {}
 
+---@param width integer
+---@param height integer
 function M.newM(width, height)
 	width = width or 1
 	height = height or 1
