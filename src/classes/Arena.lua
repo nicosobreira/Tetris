@@ -29,10 +29,11 @@ function Arena:merge(shape)
 end
 
 function Arena:draw()
+	matrix.printM(self.matrix)
 	for j, column in ipairs(self.matrix) do
-		for i, element in ipairs(column) do
-			if element ~= 0 and element <= #sprites then
-				love.graphics.draw(sprites[element], self.pos.x + (CELLSIZE * i), self.pos.y + (CELLSIZE * j))
+		for i, color in ipairs(column) do
+			if color ~= 0 and color <= #sprites then
+				love.graphics.draw(sprites[color], self.pos.x + (CELLSIZE * i), self.pos.y + (CELLSIZE * j))
 			end
 		end
 	end
