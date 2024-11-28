@@ -1,11 +1,12 @@
 local function reverseT(tbl)
-	if tbl and #tbl > 1 then
-		local temp = nil
-		for n = 1, math.floor(#tbl / 2) do
-			temp = tbl[n]
-			tbl[n] = tbl[#tbl - (n - 1)]
-			tbl[#tbl - (n - 1)] = temp
-		end
+	if not tbl or #tbl < 1 then
+		error("This table cannot be reversed", 100)
+	end
+	local temp = 0
+	for n = 1, math.floor(#tbl / 2) do
+		temp = tbl[n]
+		tbl[n] = tbl[#tbl - (n - 1)]
+		tbl[#tbl - (n - 1)] = temp
 	end
 end
 
@@ -14,13 +15,12 @@ local M = {}
 ---@param width integer
 ---@param height integer
 function M.newM(width, height)
-	width = width or 1
-	height = height or 1
 	local matrix = {}
-	for j = 1, height do
-		table.insert(matrix, {})
-		for _ = 1, width do
-			table.insert(matrix[j], 0)
+
+	for i = 1, height do
+		matrix[i] = {}
+		for j = 1, width do
+			matrix[i][j] = 0
 		end
 	end
 
@@ -28,10 +28,9 @@ function M.newM(width, height)
 end
 
 function M.printM(matrix)
-	for _, column in ipairs(matrix) do
-		for _, element in ipairs(column) do
-			io.write(element)
-			io.write(" ")
+	for _, line in ipairs(matrix) do
+		for _, element in ipairs(line) do
+			io.write(element .. " ")
 		end
 		print()
 	end
@@ -41,13 +40,14 @@ end
 function M.mergeM(matrix1, matrix2, x, y)
 	x = x or 0
 	y = y or 0
-	for j, column in ipairs(matrix2) do
-		for i, _ in ipairs(column) do
-			matrix1[j + x][i + y] = matrix2[j][i]
+	for i, line in ipairs(matrix2) do
+		for j, _ in ipairs(line) do
+			matrix1[i + x][j + y] = matrix2[i][j]
 		end
 	end
 end
 
+-- TODO use `ipairs` for the `for loops`
 function M.transposeM(matrix)
 	local height = #matrix
 	local width = #matrix[1]
