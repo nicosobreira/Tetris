@@ -25,7 +25,7 @@ function love.load()
 
 	-- current_block = Block.newRandom(5, 5, CELLSIZE)
 	Current_block = Block.new(5, 5, shapes.l)
-	myArena = Arena.new(0, 0, 10, 20)
+	myArena = Arena.new(0, 0, 12, 20)
 	myArena:merge(Current_block)
 end
 
