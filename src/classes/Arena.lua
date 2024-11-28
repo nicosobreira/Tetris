@@ -18,7 +18,7 @@ end
 function Arena.new(x, y, width, height)
 	local self = setmetatable({}, Arena)
 
-	self.pos = { x = x, y = y }
+	self.pos = { x = (x - math.floor(width / 2)), y = (y + math.floor(height / 2)) }
 	self.matrix = matrix.newM(width, height)
 
 	return self
