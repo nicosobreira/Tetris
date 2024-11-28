@@ -52,12 +52,10 @@ function M.transposeM(matrix)
 	local height = #matrix
 	local width = #matrix[1]
 	local tmp1, tmp2
-	for i = 1, height do
-		for j = i + 1, width do
-			tmp1 = matrix[i][j]
-			tmp2 = matrix[j][i]
-			matrix[i][j] = tmp2
-			matrix[j][i] = tmp1
+	for i, line in ipairs(matrix) do
+		for j, element in ipairs(line) do
+			matrix[i][j] = matrix[j][i]
+			matrix[j][i] = element
 		end
 	end
 end
