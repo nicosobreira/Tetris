@@ -5,6 +5,8 @@ require("classes.Block")
 require("classes.Arena")
 require("cellsize")
 
+-- TODO Make the possible key press a table, so if I want to add more or less depending on the user parameter (like debug mode) it's more easy!
+
 local function blockKeypress(key)
 	if key == "a" then
 		Current_block.pos.y = Current_block.pos.y - 1
@@ -25,7 +27,7 @@ function love.load()
 
 	-- current_block = Block.newRandom(5, 5, CELLSIZE)
 	Current_block = Block.new(5, 5, shapes.l)
-	myArena = Arena.new(0, 0, 12, 20)
+	myArena = Arena.new(math.floor(love.graphics.getWidth() / 2), math.floor(love.graphics.getHeight() / 2), 12, 20)
 	Current_block:merge(myArena.matrix)
 end
 
