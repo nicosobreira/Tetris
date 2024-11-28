@@ -24,10 +24,6 @@ function Arena.new(x, y, width, height)
 	return self
 end
 
-function Arena:merge(shape)
-	matrix.mergeM(self.matrix, shape, self.pos.x, self.pos.y)
-end
-
 function Arena:draw()
 	matrix.printM(self.matrix)
 	for j, column in ipairs(self.matrix) do

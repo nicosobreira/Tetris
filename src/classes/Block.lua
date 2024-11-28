@@ -56,6 +56,10 @@ function Block.newRandom(x, y, size)
 	return self
 end
 
+function Block:merge(arena)
+	matrix.mergeM(arena, self.shape, self.pos.x, self.pos.y)
+end
+
 function Block:rotate(direction)
 	if direction == 1 then
 		-- Rotate clockwise
