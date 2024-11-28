@@ -15,7 +15,7 @@ local function blockKeypress(key)
 	elseif key == "q" then
 		Current_block:rotate(-1)
 	end
-	myArena:merge(Current_block)
+	Current_block:merge(myArena.matrix)
 end
 
 function love.load()
@@ -26,7 +26,7 @@ function love.load()
 	-- current_block = Block.newRandom(5, 5, CELLSIZE)
 	Current_block = Block.new(5, 5, shapes.l)
 	myArena = Arena.new(0, 0, 12, 20)
-	myArena:merge(Current_block)
+	Current_block:merge(myArena.matrix)
 end
 
 function love.keypressed(key)
@@ -40,6 +40,5 @@ function love.update() end
 
 function love.draw()
 	os.execute("clear")
-	matrix.printM(Arena.matrix)
 	myArena:draw()
 end
