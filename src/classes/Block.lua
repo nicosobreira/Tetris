@@ -3,25 +3,6 @@ local color = require("modules.color")
 local matrix = require("modules.matrix")
 local shapes = require("modules.shapes")
 
-local function randomKey(tbl)
-	-- Get all the keys
-	local keys = {}
-	for k, _ in pairs(tbl) do
-		table.insert(keys, k)
-	end
-	local key = keys[math.random(#keys)]
-	return key
-end
-
--- local function reverseT(tbl)
--- 	local reversedTable = {}
--- 	local len = #tbl
--- 	for index, value in ipairs(tbl) do
--- 		reversedTable[len + 1 - index] = value
--- 	end
--- 	return reversedTable
--- end
-
 Block = {
 	size = 0,
 	pos = {

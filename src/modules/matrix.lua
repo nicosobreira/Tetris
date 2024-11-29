@@ -38,8 +38,8 @@ function M.mergeM(matrix1, matrix2, x, y)
 end
 
 function M.transposeM(matrix)
-	for i, line in ipairs(matrix) do
-		for j, element in ipairs(line) do
+	for i, _ in ipairs(matrix) do
+		for j, element in ipairs(matrix[i]) do
 			matrix[i][j] = matrix[j][i]
 			matrix[j][i] = element
 		end
@@ -47,8 +47,8 @@ function M.transposeM(matrix)
 end
 
 function M.reverseLineM(matrix)
-	for j, _ in ipairs(matrix) do
-		tables.reverseT(matrix[j])
+	for i, _ in ipairs(matrix) do
+		tables.reverseT(matrix[i])
 	end
 end
 

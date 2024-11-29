@@ -1,6 +1,7 @@
 local love = require("love")
 local shapes = require("modules.shapes")
 local matrix = require("modules.matrix")
+local tables = require("modules.tables")
 require("classes.Block")
 require("classes.Arena")
 require("cellsize")
@@ -8,31 +9,27 @@ require("cellsize")
 -- TODO Make the possible key press a table, so if I want to add more or less depending on the user parameter (like debug mode) it's more easy!
 
 BlockKeypress = {
-	a = function()
-		Current_block.pos.x = Current_block.pos.x - 1
+	a = function(block)
+		block.pos.y = block.pos.y - 1
 	end,
-	d = function()
-		Current_block.pos.y = Current_block.pos.y - 1
+	d = function(block)
+		block.pos.y = block.pos.y + 1
 	end,
-	e = function()
-		Current_block:rotate(1)
+	e = function(block)
+		block:rotate(1)
 	end,
-	q = function()
-		Current_block:rotate(-1)
+	q = function(block)
+		block:rotate(-1)
 	end,
 }
 
-local function blockKeypress(key)
-	if key == "a" then
-		Current_block.pos.y = Current_block.pos.y - 1
-	elseif key == "d" then
-		Current_block.pos.y = Current_block.pos.y + 1
-	elseif key == "e" then
-		Current_block:rotate(1)
-	elseif key == "q" then
-		Current_block:rotate(-1)
+local function blockKeypress(current_block, matrix)
+	for key, func in pairs(BlockKeypress) do
+		if love.keyboard.isDown(key) then
+			func(current_block)
+			current_block:merge(matrix)
+		end
 	end
-	Current_block:merge(myArena.matrix)
 end
 
 function love.load()
@@ -40,14 +37,13 @@ function love.load()
 
 	math.randomseed(os.time())
 
-	-- current_block = Block.newRandom(5, 5, CELLSIZE)
 	Current_block = Block.new(5, 5, shapes.l)
 	myArena = Arena.new(math.floor(love.graphics.getWidth() / 2), math.floor(love.graphics.getHeight() / 2), 12, 20)
 	Current_block:merge(myArena.matrix)
 end
 
 function love.keypressed(key)
-	blockKeypress(key)
+	blockKeypress(Current_block, myArena.matrix)
 	if key == "escape" then
 		love.event.quit()
 	end

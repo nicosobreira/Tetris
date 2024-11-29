@@ -1,36 +1,26 @@
-local shapes = require("modules.shapes")
--- local matrix = require("modules.matrix")
+local function eraseTerminal()
+	os.execute("clear")
+end
+-- writes an `*' at column `x' , row `y'
+local function mark(x, y)
+	io.write(string.format("\27[%d;%dH*", math.floor(y), math.floor(x)))
+end
+-- Terminal size
+TermSize = { w = 80, h = 24 }
 
-local function printT(tbl)
-	for _, element in ipairs(tbl) do
-		io.write(element .. " ")
+-- plot a function
+-- (assume that domain and image are in the range [-1,1])
+local function plot(f)
+	eraseTerminal()
+	for i = 1, TermSize.w do
+		local x = (i / TermSize.w) * 2 - 1
+		local y = (f(x) + 1) / 2 * TermSize.h
+		mark(i, y)
 	end
-	print()
+	_ = io.read() -- wait before spoiling the screen
+	eraseTerminal()
 end
 
-local function randomKey(tbl)
-	-- Get all the keys
-	local keys = {}
-	for k, _ in pairs(tbl) do
-		table.insert(keys, k)
-	end
-	local key = keys[math.random(#keys)]
-	return key
-end
-
-local function reverseTable(tbl)
-	local reversedTable = {}
-	local len = #tbl
-	local tmp
-	for index = 1, len // 2 do
-		tmp = tbl[index]
-	end
-	return reversedTable
-end
-local tbl = { "4", "10", "3" }
-printT(tbl)
-table.sort(tbl, function(a, b)
-	return a > b
+plot(function(x)
+	return math.sin(x * 2 * math.pi)
 end)
--- local reversed = reverseTable(tbl)
-printT(tbl)
