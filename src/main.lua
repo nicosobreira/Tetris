@@ -7,6 +7,21 @@ require("cellsize")
 
 -- TODO Make the possible key press a table, so if I want to add more or less depending on the user parameter (like debug mode) it's more easy!
 
+BlockKeypress = {
+	a = function()
+		Current_block.pos.x = Current_block.pos.x - 1
+	end,
+	d = function()
+		Current_block.pos.y = Current_block.pos.y - 1
+	end,
+	e = function()
+		Current_block:rotate(1)
+	end,
+	q = function()
+		Current_block:rotate(-1)
+	end,
+}
+
 local function blockKeypress(key)
 	if key == "a" then
 		Current_block.pos.y = Current_block.pos.y - 1

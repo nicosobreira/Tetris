@@ -1,14 +1,4 @@
-local function reverseT(tbl)
-	if not tbl or #tbl < 1 then
-		error("This table cannot be reversed", 100)
-	end
-	local temp = 0
-	for n = 1, math.floor(#tbl / 2) do
-		temp = tbl[n]
-		tbl[n] = tbl[#tbl - (n - 1)]
-		tbl[#tbl - (n - 1)] = temp
-	end
-end
+local tables = require("modules.tables")
 
 local M = {}
 
@@ -47,7 +37,6 @@ function M.mergeM(matrix1, matrix2, x, y)
 	end
 end
 
--- TODO use `ipairs` for the `for loops`
 function M.transposeM(matrix)
 	for i, line in ipairs(matrix) do
 		for j, element in ipairs(line) do
@@ -59,7 +48,7 @@ end
 
 function M.reverseLineM(matrix)
 	for j, _ in ipairs(matrix) do
-		reverseT(matrix[j])
+		tables.reverseT(matrix[j])
 	end
 end
 
