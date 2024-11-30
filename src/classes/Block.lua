@@ -5,7 +5,6 @@ local shapes = require("modules.shapes")
 require("cellsize")
 
 Block = {
-	size = 0,
 	pos = {
 		x = 0,
 		y = 0,
@@ -18,11 +17,10 @@ function Block.__index(_, key)
 	return Block[key]
 end
 
-function Block.new(x, y, shape, size)
+function Block.new(x, y, shape)
 	local self = setmetatable({}, Block)
 
 	self.pos = { x = x * CELLSIZE, y = y * CELLSIZE }
-	self.size = size
 	self.shape = shape
 	self.time_last_fall = 0
 
