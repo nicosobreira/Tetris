@@ -11,6 +11,7 @@ Block = {
 		y = 0,
 	},
 	shape = {},
+	clock = 0,
 }
 
 function Block.__index(_, key)
@@ -45,4 +46,8 @@ function Block:rotate(direction)
 		matrix.reverseLineM(self.shape)
 		matrix.transposeM(self.shape)
 	end
+end
+
+function Block:fall()
+	self.pos.y = self.pos.y + CELLSIZE
 end
