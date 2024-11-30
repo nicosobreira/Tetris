@@ -4,8 +4,9 @@ require("classes.Block")
 require("classes.Arena")
 require("cellsize")
 
+-- FIX the `Block:rotate` is broken
+
 --[ 1 TODO(s) Blocos
---1 Eu preciso achar um jeito de fazer com que os blocos cãem sozinhos
 --2 Esses blocos que caírem precisam ficar na Arena
 --3 Preciso de um sistema de colisão que detecte o bloco atual com os blocos da arena
 --4 Eu preciso fazer com que a Arena caía depois da etapa 3
@@ -17,6 +18,7 @@ require("cellsize")
 --[ 3 TODO(s) Game
 --1 Detectar o estado de Game Over
 --2 Depois que perder o jogo precisa acabar
+--3 A dificultade (velocidade da queda dos blocos) precisa aumentar
 --EXTRA Preciso criar um menu
 --]
 
@@ -54,21 +56,30 @@ function love.load()
 
 	math.randomseed(os.time())
 
-	Current_block = Block.new(0, 0, shapes.l)
-	myArena = Arena.new(0, 0, 12, 20)
+	Block_current = Block.new(0, 0, shapes.l)
+	Arena_current = Arena.new(0, 0, 12, 20)
+	Time_last_fall = love.timer.getTime()
+	Block_velocity = 1
 end
 
 function love.keypressed(key)
-	blockKeypress(Current_block)
+	blockKeypress(Block_current)
 	if key == "escape" then
 		love.event.quit()
 	end
 end
 
-function love.update() end
+function love.update()
+	Time_current = love.timer.getTime() - Time_last_fall
+	if Time_current > Block_velocity then
+		Time_last_fall = love.timer.getTime()
+		Block_current:fall()
+	end
+end
 
 function love.draw()
 	os.execute("clear")
-	myArena:draw()
-	Current_block:draw()
+	print(Time_current)
+	Arena_current:draw()
+	Block_current:draw()
 end
