@@ -58,8 +58,8 @@ function love.load()
 
 	Block_current = Block.new(0, 0, shapes.l)
 	Arena_current = Arena.new(0, 0, 12, 20)
-	Time_last_fall = love.timer.getTime()
-	Block_velocity = 1
+	Time_last_fall = 0
+	Block_fall_speed = 1
 end
 
 function love.keypressed(key)
@@ -70,8 +70,9 @@ function love.keypressed(key)
 end
 
 function love.update()
-	Time_current = love.timer.getTime() - Time_last_fall
-	if Time_current > Block_velocity then
+	-- Block fall speed
+	local time_current = love.timer.getTime() - Time_last_fall
+	if time_current > Block_fall_speed then
 		Time_last_fall = love.timer.getTime()
 		Block_current:fall()
 	end
@@ -79,7 +80,6 @@ end
 
 function love.draw()
 	os.execute("clear")
-	print(Time_current)
 	Arena_current:draw()
 	Block_current:draw()
 end

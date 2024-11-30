@@ -11,7 +11,7 @@ Block = {
 		y = 0,
 	},
 	shape = {},
-	clock = 0,
+	time_last_fall = 0,
 }
 
 function Block.__index(_, key)
@@ -24,12 +24,13 @@ function Block.new(x, y, shape, size)
 	self.pos = { x = x * CELLSIZE, y = y * CELLSIZE }
 	self.size = size
 	self.shape = shape
+	self.time_last_fall = 0
 
 	return self
 end
 
 function Block:merge(arena)
-	matrix.mergeM(arena, self.shape, self.pos.x, self.pos.y)
+	matrix.mergeM(arena, self.shape, self.pos.x, self.pos.y - CELLSIZE)
 end
 
 function Block:draw()
