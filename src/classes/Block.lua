@@ -2,6 +2,7 @@ local love = require("love")
 local color = require("modules.color")
 local matrix = require("modules.matrix")
 local shapes = require("modules.shapes")
+require("cellsize")
 
 Block = {
 	size = 0,
@@ -19,26 +20,19 @@ end
 function Block.new(x, y, shape, size)
 	local self = setmetatable({}, Block)
 
-	self.pos = { x = x, y = y }
+	self.pos = { x = x * CELLSIZE, y = y * CELLSIZE }
 	self.size = size
 	self.shape = shape
 
 	return self
 end
 
-function Block.newRandom(x, y, size)
-	local random_key = randomKey(shapes)
-	local self = setmetatable({}, Block)
-
-	self.pos = { x = x, y = y }
-	self.size = size
-	self.shape = shapes[random_key]
-
-	return self
-end
-
 function Block:merge(arena)
 	matrix.mergeM(arena, self.shape, self.pos.x, self.pos.y)
+end
+
+function Block:draw()
+	matrix.drawM(self.shape, self.pos.x, self.pos.y)
 end
 
 function Block:rotate(direction)

@@ -1,4 +1,7 @@
+local love = require("love")
 local tables = require("modules.tables")
+require("modules.sprites")
+require("cellsize")
 
 local M = {}
 
@@ -49,6 +52,17 @@ end
 function M.reverseLineM(matrix)
 	for i, _ in ipairs(matrix) do
 		tables.reverseT(matrix[i])
+	end
+end
+
+function M.drawM(matrix, x, y)
+	M.printM(matrix)
+	for j, column in ipairs(matrix) do
+		for i, color in ipairs(column) do
+			if color ~= 0 and color <= #SPRITES then
+				love.graphics.draw(SPRITES[color], x + (CELLSIZE * i), y + (CELLSIZE * j))
+			end
+		end
 	end
 end
 
