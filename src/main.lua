@@ -4,17 +4,17 @@ require("classes.Block")
 require("classes.Arena")
 require("cellsize")
 
---[ TODO(s) Blocos
+--[ 1 TODO(s) Blocos
 --1 Eu preciso achar um jeito de fazer com que os blocos cãem sozinhos
 --2 Esses blocos que caírem precisam ficar na Arena
 --3 Preciso de um sistema de colisão que detecte o bloco atual com os blocos da arena
 --4 Eu preciso fazer com que a Arena caía depois da etapa 3
 --]
---[ TODO(s) Placar
+--[ 2 TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
 --2 Esse placar precisa ser encrementado por: fileira_completa * 10
 --]
---[ TODO(s) Game
+--[ 3 TODO(s) Game
 --1 Detectar o estado de Game Over
 --2 Depois que perder o jogo precisa acabar
 --EXTRA Preciso criar um menu
