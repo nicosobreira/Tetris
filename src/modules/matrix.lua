@@ -1,7 +1,5 @@
-local love = require("love")
 local tables = require("modules.tables")
-require("modules.sprites")
-require("cellsize")
+require("const.cellsize")
 
 local M = {}
 
@@ -10,9 +8,9 @@ local M = {}
 function M.newM(width, height)
 	local matrix = {}
 
-	for i = 1, height do
+	for i = 1, width do
 		matrix[i] = {}
-		for j = 1, width do
+		for j = 1, height do
 			matrix[i][j] = 0
 		end
 	end
@@ -41,8 +39,8 @@ function M.mergeM(matrix1, matrix2, x, y)
 end
 
 function M.transposeM(matrix)
-	for i, _ in ipairs(matrix) do
-		for j, element in ipairs(matrix[i]) do
+	for i, line in ipairs(matrix) do
+		for j, element in ipairs(line) do
 			matrix[i][j] = matrix[j][i]
 			matrix[j][i] = element
 		end
@@ -50,19 +48,9 @@ function M.transposeM(matrix)
 end
 
 function M.reverseLineM(matrix)
-	for i, _ in ipairs(matrix) do
+	for i, _ in pairs(matrix) do
+		tables.printT(matrix[i])
 		tables.reverseT(matrix[i])
-	end
-end
-
-function M.drawM(matrix, x, y)
-	M.printM(matrix)
-	for j, column in ipairs(matrix) do
-		for i, color in ipairs(column) do
-			if color ~= 0 and color <= #SPRITES then
-				love.graphics.draw(SPRITES[color], x + (CELLSIZE * i), y + (CELLSIZE * j))
-			end
-		end
 	end
 end
 

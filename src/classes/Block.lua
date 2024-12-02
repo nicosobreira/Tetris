@@ -1,8 +1,8 @@
 local love = require("love")
-local color = require("modules.color")
 local matrix = require("modules.matrix")
-local shapes = require("modules.shapes")
-require("cellsize")
+local draw = require("modules.draw")
+require("const.shapes")
+require("const.cellsize")
 
 Block = {
 	pos = {
@@ -10,29 +10,41 @@ Block = {
 		y = 0,
 	},
 	shape = {},
+	size = {
+		x = 0,
+		y = 0,
+	},
 	time_last_fall = 0,
+	fall_speed = 0,
 }
 
 function Block.__index(_, key)
 	return Block[key]
 end
 
+function Block.randomShape()
+	return SHAPES[math.random(#SHAPES_KEYS)]
+end
+
+function Block.getSize(shape)
+	return { x = #shape[1], y = #shape }
+end
+
 function Block.new(x, y, shape)
 	local self = setmetatable({}, Block)
 
-	self.pos = { x = x * CELLSIZE, y = y * CELLSIZE }
+	self.pos = { x = x, y = y }
 	self.shape = shape
+	self.size = Block.getSize(self.shape)
 	self.time_last_fall = 0
 
 	return self
 end
 
-function Block:merge(arena)
-	matrix.mergeM(arena, self.shape, self.pos.x, self.pos.y - CELLSIZE)
-end
-
-function Block:draw()
-	matrix.drawM(self.shape, self.pos.x, self.pos.y)
+function Block:onCollision(arena_matrix)
+	matrix.mergeM(arena_matrix, self.shape, self.pos.x, self.pos.y)
+	self.shape = Block.randomShape()
+	Block.getSize(self.shape)
 end
 
 function Block:rotate(direction)
@@ -47,6 +59,14 @@ function Block:rotate(direction)
 	end
 end
 
-function Block:fall()
-	self.pos.y = self.pos.y + CELLSIZE
+function Block:checkFall(fall_speed)
+	local time_current = love.timer.getTime() - self.time_last_fall
+	if time_current >= fall_speed then
+		self.time_last_fall = love.timer.getTime()
+		self.pos.y = self.pos.y + 1
+	end
+end
+
+function Block:draw()
+	draw.matrixD(self.shape, self.pos.x, self.pos.y)
 end

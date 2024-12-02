@@ -1,4 +1,4 @@
-local love = require("love")
+local matrix = require("modules.matrix")
 
 local function getArgs()
 	local arguments = {}
@@ -10,7 +10,9 @@ local function getArgs()
 end
 
 local function main()
-	print(love.timer.getTimer())
+	local my_matrix = matrix.newM(10, 20)
+	print(#my_matrix)
+	print(#my_matrix[1])
 end
 
 main()

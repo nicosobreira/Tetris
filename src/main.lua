@@ -1,8 +1,8 @@
 local love = require("love")
-local shapes = require("modules.shapes")
 require("classes.Block")
 require("classes.Arena")
-require("cellsize")
+require("const.shapes")
+require("const.cellsize")
 
 -- FIX the `Block:rotate` is broken
 
@@ -22,18 +22,20 @@ require("cellsize")
 --EXTRA Preciso criar um menu
 --]
 
+-- TODO refatorar `const.sprites` para que seja preciso só passar o nome no arquivo
+
 BlockKeypress = {
 	a = function(block)
-		block.pos.x = block.pos.x - CELLSIZE
+		block.pos.x = block.pos.x - 1
 	end,
 	d = function(block)
-		block.pos.x = block.pos.x + CELLSIZE
+		block.pos.x = block.pos.x + 1
 	end,
 	j = function(block)
-		block.pos.y = block.pos.y + CELLSIZE
+		block.pos.y = block.pos.y + 1
 	end,
 	k = function(block)
-		block.pos.y = block.pos.y - CELLSIZE
+		block.pos.y = block.pos.y - 1
 	end,
 	e = function(block)
 		block:rotate(1)
@@ -56,7 +58,7 @@ function love.load()
 
 	math.randomseed(os.time())
 
-	Block_current = Block.new(0, 0, shapes.l)
+	Block_current = Block.new(0, 0, SHAPES.l)
 	Arena_current = Arena.new(0, 0, 12, 20)
 	Time_last_fall = 0
 	Block_fall_speed = 1
@@ -71,10 +73,10 @@ end
 
 function love.update()
 	-- Block fall speed
-	local time_current = love.timer.getTime() - Time_last_fall
-	if time_current > Block_fall_speed then
-		Time_last_fall = love.timer.getTime()
-		Block_current:fall()
+	Block_current:checkFall(Block_fall_speed)
+
+	if Block_current.pos.y + Block_current.size.y >= Arena_current.pos.y + Arena_current.size.y then
+		Block_current:onCollision(Arena_current.matrix)
 	end
 end
 

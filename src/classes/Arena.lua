@@ -1,7 +1,6 @@
-local love = require("love")
 local matrix = require("modules.matrix")
-local sprites = require("modules.sprites")
-require("cellsize")
+local draw = require("modules.draw")
+require("const.cellsize")
 
 Arena = {
 	pos = {
@@ -9,6 +8,10 @@ Arena = {
 		y = 0,
 	},
 	matrix = {},
+	size = {
+		x = 0,
+		y = 0,
+	},
 }
 
 function Arena.__index(_, key)
@@ -18,12 +21,13 @@ end
 function Arena.new(x, y, width, height)
 	local self = setmetatable({}, Arena)
 
-	self.pos = { x = x * CELLSIZE, y = y * CELLSIZE }
+	self.pos = { x = x, y = y }
 	self.matrix = matrix.newM(width, height)
+	self.size = { x = width, y = height }
 
 	return self
 end
 
 function Arena:draw()
-	matrix.drawM(self.matrix, self.pos.x, self.pos.y)
+	draw.matrixD(self.matrix, self.pos.x, self.pos.y)
 end
