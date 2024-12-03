@@ -27,7 +27,7 @@ function Block.randomShape()
 end
 
 function Block.getSize(shape)
-	return { x = #shape[1], y = #shape }
+	return { x = #shape, y = #shape[1] }
 end
 
 function Block.new(x, y, shape)

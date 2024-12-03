@@ -10,7 +10,7 @@ function D.matrixD(mat, x, y)
 		for j, color in ipairs(line) do
 			color = color + 1
 			if color <= #SPRITES then
-				love.graphics.draw(SPRITES[color], x + (CELLSIZE * i), y + (CELLSIZE * j))
+				love.graphics.draw(SPRITES[color], x + (CELLSIZE * j), y + (CELLSIZE * i))
 			end
 		end
 	end

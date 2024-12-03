@@ -4,7 +4,7 @@ require("classes.Arena")
 require("const.shapes")
 require("const.cellsize")
 
--- FIX the `Block:rotate` is broken
+-- FIX `Block:rotate` is STILL broken
 
 --[ 1 TODO(s) Blocos
 --2 Esses blocos que caírem precisam ficar na Arena
