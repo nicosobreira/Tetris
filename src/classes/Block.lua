@@ -4,6 +4,27 @@ local draw = require("modules.draw")
 require("const.shapes")
 require("const.cellsize")
 
+Inputs = {
+	a = function(block)
+		block.pos.x = block.pos.x - 1
+	end,
+	d = function(block)
+		block.pos.x = block.pos.x + 1
+	end,
+	j = function(block)
+		block.pos.y = block.pos.y + 1
+	end,
+	k = function(block)
+		block.pos.y = block.pos.y - 1
+	end,
+	e = function(block)
+		block:rotate(1)
+	end,
+	q = function(block)
+		block:rotate(-1)
+	end,
+}
+
 Block = {
 	pos = {
 		x = 0,
@@ -69,4 +90,12 @@ end
 
 function Block:draw()
 	draw.matrixD(self.shape, self.pos.x, self.pos.y)
+end
+
+function Block:keypress()
+	for key, func in pairs(Inputs) do
+		if love.keyboard.isDown(key) then
+			func(self)
+		end
+	end
 end

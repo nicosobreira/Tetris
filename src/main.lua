@@ -22,35 +22,6 @@ require("const.cellsize")
 --EXTRA Preciso criar um menu
 --]
 
-BlockKeypress = {
-	a = function(block)
-		block.pos.x = block.pos.x - 1
-	end,
-	d = function(block)
-		block.pos.x = block.pos.x + 1
-	end,
-	j = function(block)
-		block.pos.y = block.pos.y + 1
-	end,
-	k = function(block)
-		block.pos.y = block.pos.y - 1
-	end,
-	e = function(block)
-		block:rotate(1)
-	end,
-	q = function(block)
-		block:rotate(-1)
-	end,
-}
-
-local function blockKeypress(current_block)
-	for key, func in pairs(BlockKeypress) do
-		if love.keyboard.isDown(key) then
-			func(current_block)
-		end
-	end
-end
-
 function love.load()
 	love.window.setTitle("Tetris")
 
@@ -63,7 +34,7 @@ function love.load()
 end
 
 function love.keypressed(key)
-	blockKeypress(Block_current)
+	Block_current:keypress()
 	if key == "escape" then
 		love.event.quit()
 	end
