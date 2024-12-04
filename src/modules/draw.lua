@@ -6,12 +6,13 @@ local D = {}
 
 function D.matrixD(mat, x, y)
 	matrix.printM(mat)
-	for i, line in ipairs(mat) do
-		for j, color in ipairs(line) do
+	for j, line in ipairs(mat) do
+		for i, color in ipairs(line) do
 			color = color + 1
-			if color <= #SPRITES then
-				love.graphics.draw(SPRITES[color], x + (CELLSIZE * j), y + (CELLSIZE * i))
+			if color >= #SPRITES then
+				error("Color value can't be grater than " .. #SPRITES, 10)
 			end
+			love.graphics.draw(SPRITES[color], x + (CELLSIZE * i), y + (CELLSIZE * j))
 		end
 	end
 end
