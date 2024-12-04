@@ -22,8 +22,6 @@ require("const.cellsize")
 --EXTRA Preciso criar um menu
 --]
 
--- TODO refatorar `const.sprites` para que seja preciso só passar o nome no arquivo
-
 BlockKeypress = {
 	a = function(block)
 		block.pos.x = block.pos.x - 1
@@ -82,6 +80,8 @@ end
 
 function love.draw()
 	os.execute("clear")
+	print(Arena_current.size.x)
+	print(Arena_current.size.y)
 	Arena_current:draw()
 	Block_current:draw()
 end
