@@ -51,7 +51,7 @@ function Block:rotate(direction)
 	if direction == 1 then
 		-- Rotate clockwise
 		matrix.transposeM(self.shape)
-		matrix.reverseLineM(self.shape)
+		-- matrix.reverseLineM(self.shape)
 	else
 		-- Rotate counterclockwise
 		matrix.reverseLineM(self.shape)
@@ -63,7 +63,7 @@ function Block:checkFall(fall_speed)
 	local time_current = love.timer.getTime() - self.time_last_fall
 	if time_current >= fall_speed then
 		self.time_last_fall = love.timer.getTime()
-		self.pos.y = self.pos.y + 1
+		self.pos.y = self.pos.y + CELLSIZE
 	end
 end
 
