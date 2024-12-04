@@ -5,6 +5,7 @@ require("classes.Arena")
 
 --[ 1 TODO(s) Blocos
 --2 Esses blocos que caírem precisam ficar na Arena
+--  Para fazer isso crie um metodo na classe `Block` que verifique se em uma determinada matrix algum valor diferente de zero está presente
 --3 Preciso de um sistema de colisão que detecte o bloco atual com os blocos da arena
 --4 Eu preciso fazer com que a Arena caía depois da etapa 3
 --]
