@@ -5,23 +5,13 @@ local M = {}
 
 ---@param width number
 ---@param height number
----@param elements table
----@param default number
-function M.newM(width, height, elements, default)
-	elements = elements or {}
-	default = default or 0
+function M.newM(width, height)
 	local matrix = {}
-	local elem_index = 1
 
 	for i = 1, height do
 		matrix[i] = {}
 		for j = 1, width do
-			if elements[elem_index] == nil then
-				matrix[i][j] = default
-			else
-				matrix[i][j] = elements[elem_index]
-			end
-			elem_index = elem_index + 1
+			matrix[i][j] = 0
 		end
 	end
 
