@@ -43,10 +43,6 @@ end
 function love.update()
 	-- Block fall speed
 	Block_current:checkFall(Block_fall_speed)
-
-	if Block_current.pos.y + Block_current.size.y >= Arena_current.pos.y + Arena_current.size.y then
-		Block_current:onCollision(Arena_current.matrix)
-	end
 end
 
 function love.draw()
