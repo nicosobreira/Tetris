@@ -3,34 +3,14 @@ local matrix = require("modules.matrix")
 local draw = require("modules.draw")
 require("const.shapes")
 require("const.cellsize")
-
-Inputs = {
-	a = function(block)
-		block.pos.x = block.pos.x - 1
-	end,
-	d = function(block)
-		block.pos.x = block.pos.x + 1
-	end,
-	j = function(block)
-		block.pos.y = block.pos.y + 1
-	end,
-	k = function(block)
-		block.pos.y = block.pos.y - 1
-	end,
-	e = function(block)
-		block:rotate(1)
-	end,
-	q = function(block)
-		block:rotate(-1)
-	end,
-}
+require("const.directions")
 
 Block = {
 	pos = {
 		x = 0,
 		y = 0,
 	},
-	shape = {},
+	matrix = {},
 	size = {
 		x = 0,
 		y = 0,
@@ -47,55 +27,48 @@ function Block.randomShape()
 	return SHAPES[math.random(#SHAPES_KEYS)]
 end
 
-function Block.getSize(shape)
-	return { x = #shape, y = #shape[1] }
+function Block.getSize(matrix)
+	return { x = #matrix[1], y = #matrix }
 end
 
-function Block.new(x, y, shape)
+function Block.new(x, y, matrix)
 	local self = setmetatable({}, Block)
 
 	self.pos = { x = x, y = y }
-	self.shape = shape
-	self.size = Block.getSize(self.shape)
+	self.matrix = matrix
+	self.size = Block.getSize(self.matrix)
 	self.time_last_fall = 0
 
 	return self
 end
 
 function Block:onCollision(arena_matrix)
-	matrix.mergeM(arena_matrix, self.shape, self.pos.x, self.pos.y)
-	self.shape = Block.randomShape()
-	Block.getSize(self.shape)
+	self.matrix = Block.randomShape()
+	Block.getSize(self.matrix)
 end
 
 function Block:rotate(direction)
-	if direction == 1 then
+	if direction == CLOCKWISE then
 		-- Rotate clockwise
-		matrix.transposeM(self.shape)
-		matrix.reverseLineM(self.shape)
-	else
+		matrix.transposeM(self.matrix)
+		matrix.reverseLineM(self.matrix)
+	elseif direction == COUNTERCLOCKWISE then
 		-- Rotate counterclockwise
-		matrix.reverseLineM(self.shape)
-		matrix.transposeM(self.shape)
+		matrix.reverseLineM(self.matrix)
+		matrix.transposeM(self.matrix)
 	end
 end
 
-function Block:checkFall(fall_speed)
+function Block:fall(fall_speed)
 	local time_current = love.timer.getTime() - self.time_last_fall
 	if time_current >= fall_speed then
 		self.time_last_fall = love.timer.getTime()
-		self.pos.y = self.pos.y + 1
+		self.pos.y = self.pos.y + DOWN
 	end
 end
 
 function Block:draw()
-	draw.matrixD(self.shape, self.pos.x, self.pos.y)
+	draw.matrixD(self.matrix, self.pos.x, self.pos.y)
 end
 
-function Block:keypress()
-	for key, func in pairs(Inputs) do
-		if love.keyboard.isDown(key) then
-			func(self)
-		end
-	end
-end
+function Block:keypress() end

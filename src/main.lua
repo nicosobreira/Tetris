@@ -1,10 +1,7 @@
 local love = require("love")
+local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
-require("const.shapes")
-require("const.cellsize")
-
--- FIX `Block:rotate` is STILL broken
 
 --[ 1 TODO(s) Blocos
 --2 Esses blocos que caírem precisam ficar na Arena
@@ -34,7 +31,7 @@ function love.load()
 end
 
 function love.keypressed(key)
-	Block_current:keypress()
+	keyboard.onBlockKeypress(key, Block_current)
 	if key == "escape" then
 		love.event.quit()
 	end
@@ -42,7 +39,7 @@ end
 
 function love.update()
 	-- Block fall speed
-	Block_current:checkFall(Block_fall_speed)
+	Block_current:fall(Block_fall_speed)
 end
 
 function love.draw()

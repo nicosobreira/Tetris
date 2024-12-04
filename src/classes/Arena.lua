@@ -32,6 +32,14 @@ function Arena.new(x, y, width, height)
 	return self
 end
 
+function Arena:merge(block)
+	matrix.mergeM(self.matrix, block.matrix, block.x, block.y)
+end
+
 function Arena:draw()
 	draw.matrixD(self.matrix, self.pos.x, self.pos.y)
+end
+
+function Arena:reset()
+	matrix.reset(self.matrix, 0)
 end

@@ -57,4 +57,12 @@ function M.reverseLineM(matrix)
 	end
 end
 
+function M.reset(matrix, value)
+	for i = 1, #matrix do
+		for j = 1, #matrix[1] do
+			matrix[i][j] = value
+		end
+	end
+end
+
 return M
