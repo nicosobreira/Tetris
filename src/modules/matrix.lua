@@ -34,16 +34,18 @@ function M.mergeM(matrix1, matrix2, x, y)
 	y = y or 0
 	for i, line in ipairs(matrix2) do
 		for j, element2 in ipairs(line) do
-			matrix1[j + x][i + y] = element2
+			matrix1[i + y][j + x] = element2
 		end
 	end
 end
 
 function M.transposeM(matrix)
-	for i, _ in ipairs(matrix) do
-		for j, element in ipairs(matrix[i]) do
+	local tmp
+	for i = 1, #matrix do
+		for j = 1 + i, #matrix[i] do
+			tmp = matrix[i][j]
 			matrix[i][j] = matrix[j][i]
-			matrix[j][i] = element
+			matrix[j][i] = tmp
 		end
 	end
 end
