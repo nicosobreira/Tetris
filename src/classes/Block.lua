@@ -65,7 +65,7 @@ function Block:fall(fall_speed)
 	local time_current = love.timer.getTime() - self.time_last_fall
 	if time_current >= fall_speed then
 		self.time_last_fall = love.timer.getTime()
-		self.pos.y = self.pos.y + DOWN
+		self:goDown()
 	end
 end
 
