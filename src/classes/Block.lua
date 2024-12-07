@@ -5,57 +5,59 @@ require("const.shapes")
 require("const.cellsize")
 require("const.directions")
 
-Block = {
-	pos = {
-		x = 0,
-		y = 0,
-	},
-	matrix = {},
-	size = {
-		x = 0,
-		y = 0,
-	},
-	time_last_fall = 0,
-	fall_speed = 0,
-}
+Block = {}
 
 function Block.__index(_, key)
 	return Block[key]
 end
 
+setmetatable(Block, {
+	__call = function(cls, ox, oy, x, y, shape)
+		return cls.new(ox, oy, x, y, shape)
+	end,
+})
+
 function Block.randomShape()
-	return SHAPES[math.random(#SHAPES_KEYS)]
+	local key = SHAPES_KEYS[math.random(1, #SHAPES_KEYS)]
+	return SHAPES[key]
 end
 
-function Block.getSize(matrix)
-	return { x = #matrix[1], y = #matrix }
-end
-
-function Block.new(x, y, matrix)
+function Block.new(ox, oy, x, y, shape)
 	local self = setmetatable({}, Block)
 
+	self.origin = { x = ox, y = oy }
 	self.pos = { x = x, y = y }
-	self.matrix = matrix
-	self.size = Block.getSize(self.matrix)
+	self.matrix = shape or Block.randomShape()
 	self.time_last_fall = 0
 
 	return self
 end
 
-function Block:onCollision(arena_matrix)
-	self.matrix = Block.randomShape()
-	Block.getSize(self.matrix)
+function Block:goDown()
+	self.pos.y = self.pos.y + DOWN
+end
+
+function Block:goUp()
+	self.pos.y = self.pos.y + UP
+end
+
+function Block:goLeft()
+	self.pos.x = self.pos.x + LEFT
+end
+
+function Block:goRight()
+	self.pos.x = self.pos.x + RIGHT
 end
 
 function Block:rotate(direction)
 	if direction == CLOCKWISE then
 		-- Rotate clockwise
-		matrix.transposeM(self.matrix)
-		matrix.reverseLineM(self.matrix)
+		matrix.transpose(self.matrix)
+		matrix.reverseLine(self.matrix)
 	elseif direction == COUNTERCLOCKWISE then
 		-- Rotate counterclockwise
-		matrix.reverseLineM(self.matrix)
-		matrix.transposeM(self.matrix)
+		matrix.reverseLine(self.matrix)
+		matrix.transpose(self.matrix)
 	end
 end
 
@@ -68,7 +70,34 @@ function Block:fall(fall_speed)
 end
 
 function Block:draw()
-	draw.matrixD(self.matrix, self.pos.x, self.pos.y)
+	local color
+	matrix.print(self.matrix)
+	for i = 1, #self.matrix do
+		for j = 1, #self.matrix[i] do
+			color = self.matrix[i][j] + 1
+			if color ~= 1 then
+				love.graphics.draw(
+					SPRITES[color],
+					self.origin.x + (self.pos.x * CELLSIZE) + (CELLSIZE * j),
+					self.origin.y + (self.pos.y * CELLSIZE) + (CELLSIZE * i)
+				)
+			end
+		end
+	end
 end
 
-function Block:keypress() end
+function Block:isColliding(arena_matrix)
+	for i = 1, #self.matrix do
+		for j = 1, #self.matrix[i] do
+			if self.matrix[i][j] ~= 0 and arena_matrix[i + self.pos.y][j + self.pos.x] ~= 0 then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function Block:reset()
+	self.matrix = Block.randomShape()
+	self.pos = { x = self.origin.x + 5, y = self.origin.y + 5 }
+end

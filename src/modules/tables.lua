@@ -17,7 +17,7 @@ function T.getKeys(tbl)
 end
 
 function T.reverseT(tbl)
-	local temp = 0
+	local temp
 	local len = #tbl
 	for n = 1, math.floor(len / 2) do
 		temp = tbl[n]

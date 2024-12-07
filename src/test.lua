@@ -1,10 +1,10 @@
 local matrix = require("modules.matrix")
 
 local function main()
-	local my_matrix = { { 1, 2 }, { 0, 0 } }
-	matrix.printM(my_matrix)
-	matrix.transposeM(my_matrix)
-	matrix.printM(my_matrix)
+	local mat = matrix.new(10, 20)
+	matrix.print(mat)
+	matrix.setColumn(mat, 1, 4)
+	matrix.print(mat)
 end
 
 main()

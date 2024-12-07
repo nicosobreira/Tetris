@@ -1,22 +1,20 @@
+require("classes.Block")
 require("const.directions")
 
 local K = {}
 
 local BLOCK = {
 	a = function(block)
-		block.pos.x = block.pos.x + LEFT
+		block:goLeft()
 	end,
 	d = function(block)
-		block.pos.x = block.pos.x + RIGHT
+		block:goRight()
 	end,
 	s = function(block)
-		block.pos.y = block.pos.y + DOWN
-	end,
-	j = function(block)
-		block.pos.y = block.pos.y + DOWN
+		block:goDown()
 	end,
 	k = function(block)
-		block.pos.y = block.pos.y + UP
+		block:goUp()
 	end,
 	e = function(block)
 		block:rotate(CLOCKWISE)

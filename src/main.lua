@@ -25,28 +25,31 @@ function love.load()
 
 	math.randomseed(os.time())
 
-	Block_current = Block.new(0, 0, SHAPES.l)
-	Arena_current = Arena.new(0, 0, 12, 20)
+	Game = {}
+	Game.arena = Arena(0, 0, 12, 20)
+	Game.block = Block(Game.arena.pos.x, Game.arena.pos.y, 3, 3, SHAPES.l)
 	Time_last_fall = 0
-	Block_fall_speed = 1
+	Block_fall_speed = 0.8
 end
 
 function love.keypressed(key)
-	keyboard.onBlockKeypress(key, Block_current)
+	keyboard.onBlockKeypress(key, Game.block)
 	if key == "escape" then
 		love.event.quit()
 	end
 end
 
 function love.update()
+	if Game.block:isColliding(Game.arena.matrix) then
+		Game.arena:merge(Game.block)
+		Game.block:reset()
+	end
 	-- Block fall speed
-	Block_current:fall(Block_fall_speed)
+	Game.block:fall(Block_fall_speed)
 end
 
 function love.draw()
 	os.execute("clear")
-	print(Arena_current.size.x)
-	print(Arena_current.size.y)
-	Arena_current:draw()
-	Block_current:draw()
+	Game.arena:draw()
+	Game.block:draw()
 end
