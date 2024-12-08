@@ -1,6 +1,6 @@
 local love = require("love")
 local matrix = require("modules.matrix")
-local draw = require("modules.draw")
+local tables = require("modules.tables")
 require("const.cellsize")
 
 Arena = {}
@@ -49,7 +49,15 @@ function Arena:draw()
 end
 
 function Arena:merge(block)
-	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y - 1, _)
+	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y + UP, nil)
+end
+
+function Arena:hasCompleteLines()
+	for i = 1, #self.matrix do
+		if not tables.contains(self.matrix[i], 0) then
+			tables.set(matrix[i], 0)
+		end
+	end
 end
 
 function Arena:reset()

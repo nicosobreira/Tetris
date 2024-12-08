@@ -33,20 +33,15 @@ function Block.new(ox, oy, x, y, shape)
 	return self
 end
 
-function Block:goDown()
-	self.pos.y = self.pos.y + DOWN
+function Block:goVertical(direction)
+	self.pos.y = self.pos.y + direction
 end
 
-function Block:goUp()
-	self.pos.y = self.pos.y + UP
-end
-
-function Block:goLeft()
-	self.pos.x = self.pos.x + LEFT
-end
-
-function Block:goRight()
-	self.pos.x = self.pos.x + RIGHT
+function Block:goHorizontal(direction, arena)
+	self.pos.x = self.pos.x + direction
+	if self:isColliding(arena.matrix) then
+		self.pos.x = self.pos.x - direction
+	end
 end
 
 function Block:rotate(direction)
@@ -65,7 +60,7 @@ function Block:fall(fall_speed)
 	local time_current = love.timer.getTime() - self.time_last_fall
 	if time_current >= fall_speed then
 		self.time_last_fall = love.timer.getTime()
-		self:goDown()
+		self:goVertical(DOWN)
 	end
 end
 
@@ -89,7 +84,7 @@ end
 function Block:isColliding(arena_matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
-			if self.matrix[i][j] ~= 0 and arena_matrix[i + self.pos.y][j + self.pos.x] ~= 0 then
+			if self.matrix[i][j] ~= 0 and (arena_matrix[i + self.pos.y][j + self.pos.x] ~= 0) then
 				return true
 			end
 		end
@@ -99,5 +94,5 @@ end
 
 function Block:reset()
 	self.matrix = Block.randomShape()
-	self.pos = { x = self.origin.x + 5, y = self.origin.y + 5 }
+	self.pos = { x = self.origin.x + 5, y = self.origin.y }
 end

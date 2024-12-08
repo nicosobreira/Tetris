@@ -42,7 +42,6 @@ end
 
 function M.reverseLine(matrix)
 	for i, _ in pairs(matrix) do
-		tables.printT(matrix[i])
 		tables.reverseT(matrix[i])
 	end
 end
@@ -79,5 +78,7 @@ function M.merge(matrix1, matrix2, x, y, ignore)
 		end
 	end
 end
+
+function M.moveDown(matrix) end
 
 return M

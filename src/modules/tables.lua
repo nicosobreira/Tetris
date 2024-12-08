@@ -26,4 +26,19 @@ function T.reverseT(tbl)
 	end
 end
 
+function T.contains(tbl, cont)
+	for i = 1, #tbl do
+		if tbl[i] == cont then
+			return true
+		end
+	end
+	return false
+end
+
+function T.set(tbl, value)
+	for i = 1, #tbl do
+		tbl[i] = value
+	end
+end
+
 return T

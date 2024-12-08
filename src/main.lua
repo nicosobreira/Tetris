@@ -4,9 +4,6 @@ require("classes.Block")
 require("classes.Arena")
 
 --[ 1 TODO(s) Blocos
---2 Esses blocos que caírem precisam ficar na Arena
---  Para fazer isso crie um metodo na classe `Block` que verifique se em uma determinada matrix algum valor diferente de zero está presente
---3 Preciso de um sistema de colisão que detecte o bloco atual com os blocos da arena
 --4 Eu preciso fazer com que a Arena caía depois da etapa 3
 --]
 --[ 2 TODO(s) Placar
@@ -33,19 +30,19 @@ function love.load()
 end
 
 function love.keypressed(key)
-	keyboard.onBlockKeypress(key, Game.block)
+	keyboard.onBlockKeypress(key, Game.block, Game.arena)
 	if key == "escape" then
 		love.event.quit()
 	end
 end
 
 function love.update()
+	-- Block fall speed
+	Game.block:fall(Block_fall_speed)
 	if Game.block:isColliding(Game.arena.matrix) then
 		Game.arena:merge(Game.block)
 		Game.block:reset()
 	end
-	-- Block fall speed
-	Game.block:fall(Block_fall_speed)
 end
 
 function love.draw()
