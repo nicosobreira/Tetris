@@ -54,9 +54,16 @@ function M.set(matrix, value)
 	end
 end
 
-function M.isColliding(matrix1, matrix2, pos1, pos2)
+function M.isColliding(matrix1, matrix2, pos1)
+	local x_to_collide2
+	local y_to_collide2
 	for i = 1, #matrix1 do
 		for j = 1, #matrix1[i] do
+			x_to_collide2 = i + pos1.y
+			y_to_collide2 = j + pos1.y
+			if x_to_collide2 >= #matrix2[i] and y_to_collide2 - 1 >= #matrix2 then
+				return true
+			end
 			if matrix1[i][j] ~= 0 and matrix2[i + pos1.y][j + pos1.x] ~= 0 then
 				return true
 			end
