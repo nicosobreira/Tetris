@@ -21,4 +21,4 @@ local FILES = {
 	"red.png",
 }
 
-SPRITES = setSprites(FILES, PATH)
+COLORS = setSprites(FILES, PATH)

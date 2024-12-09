@@ -18,7 +18,7 @@ setmetatable(Arena, {
 function Arena.newMatrix(width, height)
 	width = width + 2
 	height = height + 1
-	local value = #SPRITES + 1
+	local value = #COLORS + 1
 	local mat = matrix.new(width, height)
 	matrix.setLine(mat, #mat, value)
 	matrix.setColumn(mat, 1, value)
@@ -30,7 +30,7 @@ function Arena.new(x, y, width, height)
 	local self = setmetatable({}, Arena)
 
 	self.pos = { x = x, y = y }
-	self.matrix = Arena.newMatrix(width, height)
+	self.matrix = matrix.new(width, height)
 
 	return self
 end
@@ -41,8 +41,8 @@ function Arena:draw()
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			color = self.matrix[i][j] + 1
-			if color <= #SPRITES then
-				love.graphics.draw(SPRITES[color], self.pos.x + (CELLSIZE * j), self.pos.y + (CELLSIZE * i))
+			if color <= #COLORS then
+				love.graphics.draw(COLORS[color], self.pos.x + (CELLSIZE * j), self.pos.y + (CELLSIZE * i))
 			end
 		end
 	end
@@ -55,11 +55,11 @@ end
 function Arena:hasCompleteLines()
 	for i = 1, #self.matrix do
 		if not tables.contains(self.matrix[i], 0) then
-			tables.set(matrix[i], 0)
+			tables.set(self.matrix[i], 0)
 		end
 	end
 end
 
 function Arena:reset()
-	matrix.set(self.matrix, 0)
+	self.matrix = Arena.newMatrix(#self.matrix, #self.matrix[1])
 end

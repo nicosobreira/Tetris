@@ -3,8 +3,10 @@ local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
 
+-- TODO ver se valhe apena criar um método da classe Block chamdo willCollide para verificar se um bloco irá colidir
+
 --[ 1 TODO(s) Blocos
---4 Eu preciso fazer com que a Arena caía depois da etapa 3
+--4 Eu preciso fazer com que a Arena caía depois de uma ou mais linhas serem completas
 --]
 --[ 2 TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
@@ -26,7 +28,7 @@ function love.load()
 	Game.arena = Arena(0, 0, 12, 20)
 	Game.block = Block(Game.arena.pos.x, Game.arena.pos.y, 3, 3, SHAPES.l)
 	Time_last_fall = 0
-	Block_fall_speed = 0.8
+	Block_fall_speed = 1
 end
 
 function love.keypressed(key)

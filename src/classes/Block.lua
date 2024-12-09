@@ -7,15 +7,15 @@ require("const.directions")
 
 Block = {}
 
-function Block.__index(_, key)
-	return Block[key]
-end
-
 setmetatable(Block, {
 	__call = function(cls, ox, oy, x, y, shape)
 		return cls.new(ox, oy, x, y, shape)
 	end,
 })
+
+function Block.__index(_, key)
+	return Block[key]
+end
 
 function Block.randomShape()
 	local key = SHAPES_KEYS[math.random(1, #SHAPES_KEYS)]
@@ -65,34 +65,32 @@ function Block:fall(fall_speed)
 end
 
 function Block:draw()
+	local to_draw_pos_x = self.origin.x + (self.pos.x * CELLSIZE)
+	local to_draw_pos_y = self.origin.y + (self.pos.y * CELLSIZE)
 	local color
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			color = self.matrix[i][j] + 1
 			if color ~= 1 then
-				love.graphics.draw(
-					SPRITES[color],
-					self.origin.x + (self.pos.x * CELLSIZE) + (CELLSIZE * j),
-					self.origin.y + (self.pos.y * CELLSIZE) + (CELLSIZE * i)
-				)
+				love.graphics.draw(COLORS[color], to_draw_pos_x + (CELLSIZE * j), to_draw_pos_y + (CELLSIZE * i))
 			end
 		end
 	end
 end
 
 function Block:isColliding(arena_matrix)
-	for i = 1, #self.matrix do
-		for j = 1, #self.matrix[i] do
-			if self.matrix[i][j] ~= 0 and (arena_matrix[i + self.pos.y][j + self.pos.x] ~= 0) then
-				return true
-			end
-		end
-	end
-	return false
+	return matrix.isColliding(self.matrix, arena_matrix, self.pos)
 end
 
 function Block:reset()
-	self.matrix = Block.randomShape()
-	self.pos = { x = self.origin.x + 5, y = self.origin.y }
+	local tmp_matrix = Block.randomShape()
+	local tmp_pos = { x = self.origin.x + 5, y = self.origin.y }
+	if self.pos.x == tmp_pos.x and self.pos.y == tmp_pos.y then
+		os.execute("clear")
+		print("You lost")
+		os.exit()
+	end
+	self.matrix = tmp_matrix
+	self.pos = tmp_pos
 end

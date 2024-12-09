@@ -54,6 +54,17 @@ function M.set(matrix, value)
 	end
 end
 
+function M.isColliding(matrix1, matrix2, pos1, pos2)
+	for i = 1, #matrix1 do
+		for j = 1, #matrix1[i] do
+			if matrix1[i][j] ~= 0 and matrix2[i + pos1.y][j + pos1.x] ~= 0 then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function M.setLine(matrix, line, value)
 	for j = 1, #matrix[line] do
 		matrix[line][j] = value
@@ -66,15 +77,12 @@ function M.setColumn(matrix, column, value)
 	end
 end
 
-function M.merge(matrix1, matrix2, x, y, ignore)
+function M.merge(matrix1, matrix2, x, y)
 	x = x or 0
 	y = y or 0
-	ignore = ignore or 0
 	for i, line in ipairs(matrix2) do
 		for j, element2 in ipairs(line) do
-			if element2 ~= ignore then
-				matrix1[i + y][j + x] = element2
-			end
+			matrix1[i + y][j + x] = element2
 		end
 	end
 end
