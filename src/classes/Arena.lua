@@ -25,23 +25,25 @@ function Arena.new(x, y, width, height)
 end
 
 function Arena.moveDown(mat, finish, start)
+	local tmp_first_line = mat[1]
 	for i = finish - 1, start, -1 do
 		local tmp = mat[i]
 		mat[i] = mat[i + 1]
 		mat[i + 1] = tmp
 	end
-	tables.set(mat[1], 0)
+	mat[1] = tmp_first_line
 end
 
-function Arena:draw()
-	local color
+function Arena:draw(tx, ty)
+	tx = tx or 0
+	ty = ty or 0
+	local to_draw_pos_x = (tx + self.pos.x) * CELLSIZE
+	local to_draw_pos_y = (ty + self.pos.y) * CELLSIZE
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
-			color = self.matrix[i][j] + 1
-			if color <= #COLORS then
-				love.graphics.draw(COLORS[color], self.pos.x + (CELLSIZE * j), self.pos.y + (CELLSIZE * i))
-			end
+			local color = self.matrix[i][j] + 1
+			love.graphics.draw(COLORS[color], to_draw_pos_x + (CELLSIZE * j), to_draw_pos_y + (CELLSIZE * i))
 		end
 	end
 end

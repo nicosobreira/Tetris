@@ -8,7 +8,7 @@ local function setSprites(files, path)
 	return sprites
 end
 
-local PATH = "sprites/"
+local PATH = "assets/sprites/"
 
 local FILES = {
 	"gray.png",

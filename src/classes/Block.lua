@@ -39,11 +39,12 @@ end
 
 function Block:goHorizontal(direction, arena)
 	self.pos.x = self.pos.x + direction
-	if self:isColliding(arena.matrix) then
+	if self:isOverlaping(arena.matrix) then
 		self.pos.x = self.pos.x - direction
 	end
 end
 
+-- FIX need to check if will collide before action
 function Block:rotate(direction)
 	if direction == CLOCKWISE then
 		-- Rotate clockwise
@@ -64,14 +65,15 @@ function Block:fall(fall_speed)
 	end
 end
 
-function Block:draw()
-	local to_draw_pos_x = self.origin.x + (self.pos.x * CELLSIZE)
-	local to_draw_pos_y = self.origin.y + (self.pos.y * CELLSIZE)
-	local color
+function Block:draw(tx, ty)
+	tx = tx or 0
+	ty = ty or 0
+	local to_draw_pos_x = (tx + self.pos.x) * CELLSIZE
+	local to_draw_pos_y = (ty + self.pos.y) * CELLSIZE
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
-			color = self.matrix[i][j] + 1
+			local color = self.matrix[i][j] + 1
 			if color ~= 1 then
 				love.graphics.draw(COLORS[color], to_draw_pos_x + (CELLSIZE * j), to_draw_pos_y + (CELLSIZE * i))
 			end
@@ -79,15 +81,14 @@ function Block:draw()
 	end
 end
 
-function Block:isColliding(arena_matrix)
-	return matrix.isColliding(self.matrix, arena_matrix, self.pos)
+function Block:isOverlaping(mat)
+	return matrix.isOverlaping(self.matrix, mat, self.pos.x, self.pos.y)
 end
 
-function Block:reset()
-	-- local tmp_matrix = Block.randomShape()
-	local tmp_matrix = SHAPES.i
-	local tmp_pos = { x = self.origin.x + 5, y = self.origin.y }
-	if self.pos.x == tmp_pos.x and self.pos.y == tmp_pos.y then
+function Block:reset(arena_matrix)
+	local tmp_matrix = Block.randomShape()
+	local tmp_pos = { x = self.origin.x + 5, y = self.origin.y + 1 }
+	if matrix.isOverlaping(tmp_matrix, arena_matrix, tmp_pos.x, tmp_pos.y) then
 		os.execute("clear")
 		print("You lost")
 		os.exit()

@@ -3,19 +3,25 @@ local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
 
--- FIX quando rotacionar verificar se não vai ficar preso na parede
+--[ TODO(s) Blocos
+--1 Ao girar detectar se vai ficar preso
+--]
 
---[ 1 TODO(s) Game
+--[ TODO(s) Game
 --1 Fazer com que se ganhe pontos depois de uma linha ser limpada
 --2 Detectar o estado de Game Over
 --3 Depois que perder o jogo precisa acabar
 --4 A dificultade (velocidade da queda dos blocos) precisa aumentar
 --EXTRA Preciso criar um menu
+--5 Ao invés de usar sprites usar love2d draw rectangle com a cor
+--6 Adicionar efeitos sonoros
 --]
 
---[ 2 TODO(s) Placar
+--[ TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
 --]
+
+-- IDEA
 
 function love.load()
 	love.window.setTitle("Tetris")
@@ -23,6 +29,7 @@ function love.load()
 	math.randomseed(os.time())
 
 	Game = {}
+	Game.score = 0
 	Game.arena = Arena(0, 0, 12, 20)
 	Game.block = Block(Game.arena.pos.x, Game.arena.pos.y, 3, 3, SHAPES.i)
 	Time_last_fall = 0
@@ -30,7 +37,7 @@ function love.load()
 end
 
 function love.keypressed(key)
-	keyboard.onBlockKeypress(key, Game.block, Game.arena)
+	keyboard.blockIsDown(Game.block, Game.arena)
 	if key == "escape" then
 		love.event.quit()
 	end
@@ -40,9 +47,9 @@ function love.update()
 	Game.arena:hasCompleteLines()
 	-- Block fall speed
 	Game.block:fall(Block_fall_speed)
-	if Game.block:isColliding(Game.arena.matrix) then
+	if Game.block:isOverlaping(Game.arena.matrix) then
 		Game.arena:merge(Game.block)
-		Game.block:reset()
+		Game.block:reset(Game.arena.matrix)
 	end
 end
 

@@ -1,7 +1,6 @@
+local love = require("love")
 require("classes.Block")
 require("const.directions")
-
-local K = {}
 
 local BLOCK = {
 	a = function(block, arena)
@@ -24,12 +23,16 @@ local BLOCK = {
 	end,
 }
 
-function K.onBlockKeypress(input, block, arena)
-	if BLOCK[input] ~= nil then
-		if input == "d" or input == "a" then
-			BLOCK[input](block, arena)
-		else
-			BLOCK[input](block)
+local K = {}
+
+function K.blockIsDown(block, arena)
+	for key, func in pairs(BLOCK) do
+		if love.keyboard.isDown(key) then
+			if key == "a" or key == "d" then
+				func(block, arena)
+			else
+				func(block)
+			end
 		end
 	end
 end

@@ -54,10 +54,10 @@ function M.set(matrix, value)
 	end
 end
 
-function M.isColliding(matrix1, matrix2, pos1)
+function M.isOverlaping(matrix1, matrix2, x2, y2)
 	for i = 1, #matrix1 do
 		for j = 1, #matrix1[i] do
-			if matrix1[i][j] ~= 0 and (matrix2[i + pos1.y] and matrix2[i + pos1.y][j + pos1.x]) ~= 0 then
+			if matrix1[i][j] ~= 0 and (matrix2[i + y2] and matrix2[i + y2][j + x2]) ~= 0 then
 				return true
 			end
 		end
