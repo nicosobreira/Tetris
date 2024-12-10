@@ -15,7 +15,6 @@ require("classes.Arena")
 
 --[ 2 TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
---2 Esse placar precisa ser encrementado por: fileira_completa * 10
 --]
 
 function love.load()
