@@ -3,24 +3,19 @@ local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
 
--- TODO ver se valhe apena criar um método da classe Block chamdo willCollide para verificar se um bloco irá colidir
-
 -- FIX quando rotacionar verificar se não vai ficar preso na parede
--- FIX contains tables
--- TODO rename contains tables
 
---[ 1 TODO(s) Blocos
---4 Eu preciso fazer com que a Arena caía depois de uma ou mais linhas serem completas
+--[ 1 TODO(s) Game
+--1 Fazer com que se ganhe pontos depois de uma linha ser limpada
+--2 Detectar o estado de Game Over
+--3 Depois que perder o jogo precisa acabar
+--4 A dificultade (velocidade da queda dos blocos) precisa aumentar
+--EXTRA Preciso criar um menu
 --]
+
 --[ 2 TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
 --2 Esse placar precisa ser encrementado por: fileira_completa * 10
---]
---[ 3 TODO(s) Game
---1 Detectar o estado de Game Over
---2 Depois que perder o jogo precisa acabar
---3 A dificultade (velocidade da queda dos blocos) precisa aumentar
---EXTRA Preciso criar um menu
 --]
 
 function love.load()
