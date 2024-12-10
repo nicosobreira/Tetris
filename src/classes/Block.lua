@@ -84,7 +84,8 @@ function Block:isColliding(arena_matrix)
 end
 
 function Block:reset()
-	local tmp_matrix = Block.randomShape()
+	-- local tmp_matrix = Block.randomShape()
+	local tmp_matrix = SHAPES.i
 	local tmp_pos = { x = self.origin.x + 5, y = self.origin.y }
 	if self.pos.x == tmp_pos.x and self.pos.y == tmp_pos.y then
 		os.execute("clear")

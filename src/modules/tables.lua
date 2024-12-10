@@ -26,13 +26,18 @@ function T.reverseT(tbl)
 	end
 end
 
-function T.contains(tbl, cont)
+function T.dontContain(tbl, element)
+	local count = 1
 	for i = 1, #tbl do
-		if tbl[i] == cont then
-			return true
+		if tbl[i] ~= element then
+			count = count + 1
 		end
 	end
-	return false
+	if count >= #tbl then
+		return true
+	else
+		return false
+	end
 end
 
 function T.set(tbl, value)

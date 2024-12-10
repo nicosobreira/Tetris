@@ -55,16 +55,9 @@ function M.set(matrix, value)
 end
 
 function M.isColliding(matrix1, matrix2, pos1)
-	local x_to_collide2
-	local y_to_collide2
 	for i = 1, #matrix1 do
 		for j = 1, #matrix1[i] do
-			x_to_collide2 = i + pos1.y
-			y_to_collide2 = j + pos1.y
-			if x_to_collide2 >= #matrix2[i] and y_to_collide2 - 1 >= #matrix2 then
-				return true
-			end
-			if matrix1[i][j] ~= 0 and matrix2[i + pos1.y][j + pos1.x] ~= 0 then
+			if matrix1[i][j] ~= 0 and (matrix2[i + pos1.y] and matrix2[i + pos1.y][j + pos1.x]) ~= 0 then
 				return true
 			end
 		end
@@ -89,11 +82,11 @@ function M.merge(matrix1, matrix2, x, y)
 	y = y or 0
 	for i, line in ipairs(matrix2) do
 		for j, element2 in ipairs(line) do
-			matrix1[i + y][j + x] = element2
+			if element2 ~= 0 and (i + y <= #matrix1 and j + x <= #matrix1[1]) then
+				matrix1[i + y][j + x] = element2
+			end
 		end
 	end
 end
-
-function M.moveDown(matrix) end
 
 return M

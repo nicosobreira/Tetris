@@ -15,17 +15,6 @@ setmetatable(Arena, {
 	end,
 })
 
-function Arena.newMatrix(width, height)
-	width = width + 2
-	height = height + 1
-	local value = #COLORS + 1
-	local mat = matrix.new(width, height)
-	matrix.setLine(mat, #mat, value)
-	matrix.setColumn(mat, 1, value)
-	matrix.setColumn(mat, #mat[1], value)
-	return mat
-end
-
 function Arena.new(x, y, width, height)
 	local self = setmetatable({}, Arena)
 
@@ -33,6 +22,15 @@ function Arena.new(x, y, width, height)
 	self.matrix = matrix.new(width, height)
 
 	return self
+end
+
+function Arena.moveDown(mat, finish, start)
+	for i = finish - 1, start, -1 do
+		local tmp = mat[i]
+		mat[i] = mat[i + 1]
+		mat[i + 1] = tmp
+	end
+	tables.set(mat[1], 0)
 end
 
 function Arena:draw()
@@ -49,17 +47,18 @@ function Arena:draw()
 end
 
 function Arena:merge(block)
-	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y + UP, nil)
+	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y + UP)
 end
 
 function Arena:hasCompleteLines()
 	for i = 1, #self.matrix do
-		if not tables.contains(self.matrix[i], 0) then
+		if tables.dontContain(self.matrix[i], 0) then
 			tables.set(self.matrix[i], 0)
+			Arena.moveDown(self.matrix, i, 1)
 		end
 	end
 end
 
 function Arena:reset()
-	self.matrix = Arena.newMatrix(#self.matrix, #self.matrix[1])
+	self.matrix = matrix.new(#self.matrix, #self.matrix[1])
 end

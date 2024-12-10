@@ -5,6 +5,10 @@ require("classes.Arena")
 
 -- TODO ver se valhe apena criar um método da classe Block chamdo willCollide para verificar se um bloco irá colidir
 
+-- FIX quando rotacionar verificar se não vai ficar preso na parede
+-- FIX contains tables
+-- TODO rename contains tables
+
 --[ 1 TODO(s) Blocos
 --4 Eu preciso fazer com que a Arena caía depois de uma ou mais linhas serem completas
 --]
@@ -26,7 +30,7 @@ function love.load()
 
 	Game = {}
 	Game.arena = Arena(0, 0, 12, 20)
-	Game.block = Block(Game.arena.pos.x, Game.arena.pos.y, 3, 3, SHAPES.l)
+	Game.block = Block(Game.arena.pos.x, Game.arena.pos.y, 3, 3, SHAPES.i)
 	Time_last_fall = 0
 	Block_fall_speed = 1
 end
@@ -39,6 +43,7 @@ function love.keypressed(key)
 end
 
 function love.update()
+	Game.arena:hasCompleteLines()
 	-- Block fall speed
 	Game.block:fall(Block_fall_speed)
 	if Game.block:isColliding(Game.arena.matrix) then
