@@ -1,5 +1,5 @@
 local tables = require("modules.tables")
-require("const.cellsize")
+require("constants.cellsize")
 
 local M = {}
 
@@ -48,13 +48,13 @@ end
 
 function M.set(matrix, value)
 	for i = 1, #matrix do
-		for j = 1, #matrix[1] do
+		for j = 1, #matrix[i] do
 			matrix[i][j] = value
 		end
 	end
 end
 
-function M.isOverlaping(matrix1, matrix2, x2, y2)
+function M.isOverlapping(matrix1, matrix2, x2, y2)
 	for i = 1, #matrix1 do
 		for j = 1, #matrix1[i] do
 			if matrix1[i][j] ~= 0 and (matrix2[i + y2] and matrix2[i + y2][j + x2]) ~= 0 then

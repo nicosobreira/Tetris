@@ -1,15 +1,15 @@
 local love = require("love")
 local matrix = require("modules.matrix")
-local draw = require("modules.draw")
-require("const.shapes")
-require("const.cellsize")
-require("const.directions")
+require("constants.shapes")
+require("constants.cellsize")
+require("constants.directions")
+require("constants.sprites")
 
 Block = {}
 
 setmetatable(Block, {
-	__call = function(cls, ox, oy, x, y, shape)
-		return cls.new(ox, oy, x, y, shape)
+	__call = function(cls, x, y, shape)
+		return cls.new(x, y, shape)
 	end,
 })
 
@@ -22,10 +22,19 @@ function Block.randomShape()
 	return SHAPES[key]
 end
 
-function Block.new(ox, oy, x, y, shape)
+function Block.rotate(direction, block_matrix)
+	if direction == CLOCKWISE then
+		matrix.transpose(block_matrix)
+		matrix.reverseLine(block_matrix)
+	elseif direction == COUNTERCLOCKWISE then
+		matrix.reverseLine(block_matrix)
+		matrix.transpose(block_matrix)
+	end
+end
+
+function Block.new(x, y, shape)
 	local self = setmetatable({}, Block)
 
-	self.origin = { x = ox, y = oy }
 	self.pos = { x = x, y = y }
 	self.matrix = shape or Block.randomShape()
 	self.time_last_fall = 0
@@ -37,23 +46,43 @@ function Block:goVertical(direction)
 	self.pos.y = self.pos.y + direction
 end
 
-function Block:goHorizontal(direction, arena)
+-- FIX don't need to check if is overlapping sideways
+function Block:goForceVertical(direction, arena_matrix)
+	local increment
+	if direction > 0 then
+		increment = 1
+	else
+		increment = -1
+	end
+	for _ = self.pos.x, #arena_matrix, increment do
+		self:goVertical(direction)
+		if self:isOverlapping(arena_matrix) then
+			self:goVertical(-direction)
+			break
+		end
+	end
+	self.time_last_fall = 0
+end
+
+function Block:goHorizontal(direction, arena_matrix)
 	self.pos.x = self.pos.x + direction
-	if self:isOverlaping(arena.matrix) then
+	if self:isOverlapping(arena_matrix) then
 		self.pos.x = self.pos.x - direction
+	end
+	self.time_last_fall = love.timer.getTime()
+end
+
+function Block:rotateClock(arena_matrix)
+	Block.rotate(CLOCKWISE, self.matrix)
+	if self:isOverlapping(arena_matrix) then
+		Block.rotate(COUNTERCLOCKWISE, self.matrix)
 	end
 end
 
--- FIX need to check if will collide before action
-function Block:rotate(direction)
-	if direction == CLOCKWISE then
-		-- Rotate clockwise
-		matrix.transpose(self.matrix)
-		matrix.reverseLine(self.matrix)
-	elseif direction == COUNTERCLOCKWISE then
-		-- Rotate counterclockwise
-		matrix.reverseLine(self.matrix)
-		matrix.transpose(self.matrix)
+function Block:rotateCounterClock(arena_matrix)
+	Block.rotate(COUNTERCLOCKWISE, self.matrix)
+	if self:isOverlapping(arena_matrix) then
+		Block.rotate(CLOCKWISE, self.matrix)
 	end
 end
 
@@ -81,14 +110,15 @@ function Block:draw(tx, ty)
 	end
 end
 
-function Block:isOverlaping(mat)
-	return matrix.isOverlaping(self.matrix, mat, self.pos.x, self.pos.y)
+function Block:isOverlapping(mat)
+	return matrix.isOverlapping(self.matrix, mat, self.pos.x, self.pos.y)
 end
 
 function Block:reset(arena_matrix)
-	local tmp_matrix = Block.randomShape()
-	local tmp_pos = { x = self.origin.x + 5, y = self.origin.y + 1 }
-	if matrix.isOverlaping(tmp_matrix, arena_matrix, tmp_pos.x, tmp_pos.y) then
+	-- local tmp_matrix = Block.randomShape()
+	local tmp_matrix = SHAPES.i
+	local tmp_pos = { x = 5, y = 1 }
+	if matrix.isOverlapping(tmp_matrix, arena_matrix, tmp_pos.x, tmp_pos.y) then
 		os.execute("clear")
 		print("You lost")
 		os.exit()

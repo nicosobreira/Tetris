@@ -1,6 +1,6 @@
 local T = {}
 
-function T.printT(tbl, sep)
+function T.print(tbl, sep)
 	sep = sep or " "
 	for _, item in ipairs(tbl) do
 		io.write(item .. sep)
@@ -26,18 +26,14 @@ function T.reverseT(tbl)
 	end
 end
 
-function T.dontContain(tbl, element)
+function T.include(tbl, element)
 	local count = 1
 	for i = 1, #tbl do
-		if tbl[i] ~= element then
-			count = count + 1
+		if tbl[i] == element then
+			return true
 		end
 	end
-	if count >= #tbl then
-		return true
-	else
-		return false
-	end
+	return false
 end
 
 function T.set(tbl, value)

@@ -3,6 +3,8 @@ local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
 
+-- FIX Não limpa a linha
+
 --[ TODO(s) Blocos
 --1 Ao girar detectar se vai ficar preso
 --]
@@ -30,25 +32,26 @@ function love.load()
 
 	Game = {}
 	Game.score = 0
+	Game.score_mult = 10
 	Game.arena = Arena(0, 0, 12, 20)
-	Game.block = Block(Game.arena.pos.x, Game.arena.pos.y, 3, 3, SHAPES.i)
+	Game.block = Block(3, 3, SHAPES.i)
 	Time_last_fall = 0
 	Block_fall_speed = 1
 end
 
 function love.keypressed(key)
-	keyboard.blockIsDown(Game.block, Game.arena)
+	keyboard.blockIsDown(key, Game.block, Game.arena.matrix)
 	if key == "escape" then
 		love.event.quit()
 	end
 end
 
 function love.update()
-	Game.arena:hasCompleteLines()
 	-- Block fall speed
 	Game.block:fall(Block_fall_speed)
-	if Game.block:isOverlaping(Game.arena.matrix) then
+	if Game.block:isOverlapping(Game.arena.matrix) then
 		Game.arena:merge(Game.block)
+		Game.arena:clearLine()
 		Game.block:reset(Game.arena.matrix)
 	end
 end
