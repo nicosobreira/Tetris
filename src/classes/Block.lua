@@ -46,22 +46,14 @@ function Block:goVertical(direction)
 	self.pos.y = self.pos.y + direction
 end
 
--- FIX don't need to check if is overlapping sideways
 function Block:goForceVertical(direction, arena_matrix)
-	local increment
-	if direction > 0 then
-		increment = 1
-	else
-		increment = -1
-	end
-	for _ = self.pos.x, #arena_matrix, increment do
+	for _ = self.pos.y, #arena_matrix, direction do
 		self:goVertical(direction)
 		if self:isOverlapping(arena_matrix) then
 			self:goVertical(-direction)
 			break
 		end
 	end
-	self.time_last_fall = 0
 end
 
 function Block:goHorizontal(direction, arena_matrix)
@@ -69,7 +61,6 @@ function Block:goHorizontal(direction, arena_matrix)
 	if self:isOverlapping(arena_matrix) then
 		self.pos.x = self.pos.x - direction
 	end
-	self.time_last_fall = love.timer.getTime()
 end
 
 function Block:rotateClock(arena_matrix)

@@ -7,8 +7,8 @@ local BLOCK = {
 	d = function(block, arena_matrix)
 		block:goHorizontal(RIGHT, arena_matrix)
 	end,
-	s = function(block)
-		block:goVertical(DOWN)
+	s = function(block, arena_matrix)
+		block:goVertical(DOWN, arena_matrix)
 	end,
 	w = function(block, arena_matrix)
 		block:goForceVertical(DOWN, arena_matrix)

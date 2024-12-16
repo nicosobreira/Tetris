@@ -3,12 +3,6 @@ local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
 
--- FIX Não limpa a linha
-
---[ TODO(s) Blocos
---1 Ao girar detectar se vai ficar preso
---]
-
 --[ TODO(s) Game
 --1 Fazer com que se ganhe pontos depois de uma linha ser limpada
 --2 Detectar o estado de Game Over
@@ -47,13 +41,12 @@ function love.keypressed(key)
 end
 
 function love.update()
-	-- Block fall speed
-	Game.block:fall(Block_fall_speed)
 	if Game.block:isOverlapping(Game.arena.matrix) then
 		Game.arena:merge(Game.block)
 		Game.arena:clearLine()
 		Game.block:reset(Game.arena.matrix)
 	end
+	Game.block:fall(Block_fall_speed)
 end
 
 function love.draw()
