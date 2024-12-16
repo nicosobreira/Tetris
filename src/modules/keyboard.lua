@@ -14,10 +14,10 @@ local BLOCK = {
 		block:goForceVertical(DOWN, arena_matrix)
 	end,
 	e = function(block, arena_matrix)
-		block:rotateClock(arena_matrix)
+		block:rotate(CLOCKWISE, arena_matrix)
 	end,
 	q = function(block, arena_matrix)
-		block:rotateCounterClock(arena_matrix)
+		block:rotate(COUNTERCLOCKWISE, arena_matrix)
 	end,
 }
 

@@ -36,8 +36,8 @@ end
 function Arena:draw(tx, ty)
 	tx = tx or 0
 	ty = ty or 0
-	local to_draw_pos_x = (tx + self.pos.x) * CELLSIZE
-	local to_draw_pos_y = (ty + self.pos.y) * CELLSIZE
+	local to_draw_pos_x = tx * CELLSIZE
+	local to_draw_pos_y = ty * CELLSIZE
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do

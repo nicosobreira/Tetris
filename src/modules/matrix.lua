@@ -1,5 +1,6 @@
 local tables = require("modules.tables")
 require("constants.cellsize")
+require("constants.directions")
 
 local M = {}
 
@@ -63,6 +64,16 @@ function M.isOverlapping(matrix1, matrix2, x2, y2)
 		end
 	end
 	return false
+end
+
+function M.rotate(direction, matrix)
+	if direction == CLOCKWISE then
+		M.transpose(matrix)
+		M.reverseLine(matrix)
+	elseif direction == COUNTERCLOCKWISE then
+		M.reverseLine(matrix)
+		M.transpose(matrix)
+	end
 end
 
 function M.setLine(matrix, line, value)

@@ -6,18 +6,16 @@ require("classes.Arena")
 --[ TODO(s) Game
 --1 Fazer com que se ganhe pontos depois de uma linha ser limpada
 --2 Detectar o estado de Game Over
---3 Depois que perder o jogo precisa acabar
+--3 Depois que perder o jogo precisa reiniciar
 --4 A dificultade (velocidade da queda dos blocos) precisa aumentar
---EXTRA Preciso criar um menu
 --5 Ao invés de usar sprites usar love2d draw rectangle com a cor
 --6 Adicionar efeitos sonoros
+--EXTRA Preciso criar um menu
 --]
 
 --[ TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
 --]
-
--- IDEA
 
 function love.load()
 	love.window.setTitle("Tetris")
@@ -28,7 +26,7 @@ function love.load()
 	Game.score = 0
 	Game.score_mult = 10
 	Game.arena = Arena(0, 0, 12, 20)
-	Game.block = Block(3, 3, SHAPES.i)
+	Game.block = Block(3, 3)
 	Time_last_fall = 0
 	Block_fall_speed = 1
 end
@@ -51,6 +49,6 @@ end
 
 function love.draw()
 	os.execute("clear")
-	Game.arena:draw()
-	Game.block:draw()
+	Game.arena:draw(5, 5)
+	Game.block:draw(5, 5)
 end

@@ -17,21 +17,6 @@ function Block.__index(_, key)
 	return Block[key]
 end
 
-function Block.randomShape()
-	local key = SHAPES_KEYS[math.random(1, #SHAPES_KEYS)]
-	return SHAPES[key]
-end
-
-function Block.rotate(direction, block_matrix)
-	if direction == CLOCKWISE then
-		matrix.transpose(block_matrix)
-		matrix.reverseLine(block_matrix)
-	elseif direction == COUNTERCLOCKWISE then
-		matrix.reverseLine(block_matrix)
-		matrix.transpose(block_matrix)
-	end
-end
-
 function Block.new(x, y, shape)
 	local self = setmetatable({}, Block)
 
@@ -40,6 +25,11 @@ function Block.new(x, y, shape)
 	self.time_last_fall = 0
 
 	return self
+end
+
+function Block.randomShape()
+	local key = SHAPES_KEYS[math.random(1, #SHAPES_KEYS)]
+	return SHAPES[key]
 end
 
 function Block:goVertical(direction)
@@ -63,17 +53,10 @@ function Block:goHorizontal(direction, arena_matrix)
 	end
 end
 
-function Block:rotateClock(arena_matrix)
-	Block.rotate(CLOCKWISE, self.matrix)
+function Block:rotate(direction, arena_matrix)
+	matrix.rotate(direction, self.matrix)
 	if self:isOverlapping(arena_matrix) then
-		Block.rotate(COUNTERCLOCKWISE, self.matrix)
-	end
-end
-
-function Block:rotateCounterClock(arena_matrix)
-	Block.rotate(COUNTERCLOCKWISE, self.matrix)
-	if self:isOverlapping(arena_matrix) then
-		Block.rotate(CLOCKWISE, self.matrix)
+		matrix.rotate(-direction, self.matrix)
 	end
 end
 
@@ -106,8 +89,7 @@ function Block:isOverlapping(mat)
 end
 
 function Block:reset(arena_matrix)
-	-- local tmp_matrix = Block.randomShape()
-	local tmp_matrix = SHAPES.i
+	local tmp_matrix = Block.randomShape()
 	local tmp_pos = { x = 5, y = 1 }
 	if matrix.isOverlapping(tmp_matrix, arena_matrix, tmp_pos.x, tmp_pos.y) then
 		os.execute("clear")
