@@ -1,4 +1,4 @@
-require("const.cellsize")
+require("constants.cellsize")
 -- LEFT = -1
 -- RIGHT = 1
 -- DOWN = 1
