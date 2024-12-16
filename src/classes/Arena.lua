@@ -50,15 +50,27 @@ function Arena:merge(block)
 	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y + UP)
 end
 
-function Arena:clearLine()
+function Arena:getClearLines()
+	local lines = {}
+	local count = 0
 	for i = 1, #self.matrix do
 		if not tables.include(self.matrix[i], 0) then
-			tables.set(self.matrix[i], 0)
-			Arena.moveDown(self.matrix, i)
+			lines[count] = i
+			count = count + 1
 		end
+	end
+	return lines
+end
+
+function Arena:clearLines(lines, score, multiply)
+	for i = 1, #lines do
+		local line = lines[i]
+		tables.set(self.matrix[line], 0)
+		Arena.moveDown(self.matrix, line)
+		score = score + multiply
 	end
 end
 
 function Arena:reset()
-	self.matrix = matrix.set(self.matrix, 0)
+	matrix.set(self.matrix, 0)
 end

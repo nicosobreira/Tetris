@@ -88,14 +88,12 @@ function Block:isOverlapping(mat)
 	return matrix.isOverlapping(self.matrix, mat, self.pos.x, self.pos.y)
 end
 
-function Block:reset(arena_matrix)
-	local tmp_matrix = Block.randomShape()
-	local tmp_pos = { x = 5, y = 1 }
-	if matrix.isOverlapping(tmp_matrix, arena_matrix, tmp_pos.x, tmp_pos.y) then
-		os.execute("clear")
-		print("You lost")
-		os.exit()
+function Block:isGameOver(arena_matrix)
+	-- local tmp_matrix = Block.randomShape()
+	self.matrix = SHAPES.i
+	self.pos = { x = 5, y = 1 }
+	if matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y) then
+		return true
 	end
-	self.matrix = tmp_matrix
-	self.pos = tmp_pos
+	return false
 end
