@@ -17,15 +17,16 @@ require("classes.Arena")
 --1 Preciso de um placar que fique no meio da largura da arena
 --]
 
+Game = {}
+
 function love.load()
 	love.window.setTitle("Tetris")
 
 	math.randomseed(os.time())
 
-	Game = {}
 	Game.score = 0
 	Game.score_mult = 10
-	Game.arena = Arena(0, 0, 12, 20)
+	Game.arena = Arena(12, 20)
 	Game.block = Block(3, 3)
 	Time_last_fall = 0
 	Block_fall_speed = 1

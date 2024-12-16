@@ -10,15 +10,14 @@ function Arena.__index(_, key)
 end
 
 setmetatable(Arena, {
-	__call = function(cls, x, y, width, height, mat)
-		return cls.new(x, y, width, height, mat)
+	__call = function(cls, width, height, mat)
+		return cls.new(width, height, mat)
 	end,
 })
 
-function Arena.new(x, y, width, height, mat)
+function Arena.new(width, height, mat)
 	local self = setmetatable({}, Arena)
 
-	self.pos = { x = x, y = y }
 	self.matrix = mat or matrix.new(width, height)
 
 	return self
