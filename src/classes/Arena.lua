@@ -21,6 +21,7 @@ function Arena.new(width, height, score_multiply, mat)
 	self.matrix = mat or matrix.new(width, height)
 	self.score_multiply = score_multiply or 10
 	self.score = 0
+	self.fall_speed = 0.9
 
 	return self
 end

@@ -32,15 +32,31 @@ function Block.randomShape()
 	return SHAPES[key]
 end
 
-function Block:goVertical(direction)
-	self.pos.y = self.pos.y + direction
+function Block:onOverlap(arena)
+	arena:merge(self)
+	arena:clearLines()
+	if self:isGameOver(arena.matrix) then
+		arena:reset()
+	end
 end
 
-function Block:goForceVertical(direction, arena_matrix)
-	for _ = self.pos.y, #arena_matrix, direction do
+function Block:isOverlapping(arena_matrix)
+	return matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y)
+end
+
+function Block:goVertical(direction, arena_matrix)
+	self.pos.y = self.pos.y + direction
+	if self:isOverlapping(arena_matrix) then
+		self.pos.y = self.pos.y - direction
+	end
+end
+
+function Block:goForceVertical(direction, arena)
+	for _ = self.pos.y, #arena.matrix, direction do
 		self:goVertical(direction)
-		if self:isOverlapping(arena_matrix) then
+		if self:isOverlapping(arena.matrix) then
 			self:goVertical(-direction)
+			self:onOverlap(arena)
 			break
 		end
 	end
@@ -60,11 +76,15 @@ function Block:rotate(direction, arena_matrix)
 	end
 end
 
-function Block:fall(fall_speed)
+function Block:fall(arena)
 	local time_current = love.timer.getTime() - self.time_last_fall
-	if time_current >= fall_speed then
+	if time_current >= arena.fall_speed then
 		self.time_last_fall = love.timer.getTime()
-		self:goVertical(DOWN)
+		self:goVertical(DOWN, arena.matrix)
+		if self:isOverlapping(arena.matrix) then
+			self:goVertical(UP, arena.matrix)
+			self:onOverlap(arena)
+		end
 	end
 end
 
@@ -81,20 +101,6 @@ function Block:draw(tx, ty)
 				love.graphics.draw(COLORS[color], to_draw_pos_x + (CELLSIZE * j), to_draw_pos_y + (CELLSIZE * i))
 			end
 		end
-	end
-end
-
-function Block:onOverlap(arena)
-	arena:merge(self)
-	arena:clearLines()
-	if self:isGameOver(arena.matrix) then
-		arena:reset()
-	end
-end
-
-function Block:isOverlapping(arena)
-	if matrix.isOverlapping(self.matrix, arena.matrix, self.pos.x, self.pos.y) then
-		self:onOverlap(arena)
 	end
 end
 

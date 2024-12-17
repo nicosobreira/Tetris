@@ -24,24 +24,22 @@ function love.load()
 
 	math.randomseed(os.time())
 
-	Game.game_over = false
 	Game.arena = Arena(12, 20)
 	Game.block = Block(3, 3, SHAPES.i)
-	Game.clear_lines = {}
-	Time_last_fall = 0
-	Block_fall_speed = 1
 end
 
 function love.keypressed(key)
-	keyboard.blockIsDown(key, Game.block, Game.arena.matrix)
+	keyboard.blockIsDown(key, Game.block, Game.arena)
 	if key == "escape" then
 		love.event.quit()
 	end
 end
 
 function love.update()
-	Game.block:isOverlapping(Game.arena.matrix)
-	Game.block:fall(Block_fall_speed)
+	if Game.block:isOverlapping(Game.arena) then
+		Game.block:onOverlap(Game.arena)
+	end
+	Game.block:fall(Game.arena)
 end
 
 function love.draw()
