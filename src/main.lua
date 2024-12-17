@@ -25,8 +25,6 @@ function love.load()
 	math.randomseed(os.time())
 
 	Game.game_over = false
-	Game.score = 0
-	Game.score_mult = 10
 	Game.arena = Arena(12, 20)
 	Game.block = Block(3, 3, SHAPES.i)
 	Game.clear_lines = {}
@@ -43,23 +41,13 @@ end
 
 function love.update()
 	if Game.block:isOverlapping(Game.arena.matrix) then
-		Game.arena:merge(Game.block)
-		Game.clear_lines = Game.arena:getClearLines()
-		if #Game.clear_lines ~= 0 then
-			Game.arena.clearLines(Game.clear_lines, Game.score, Game.score_mult)
-		end
-		Game.game_over = Game.block:isGameOver(Game.arena.matrix)
-		if Game.game_over then
-			Game.arena:reset()
-			Game.score = 0
-		end
 	end
 	Game.block:fall(Block_fall_speed)
 end
 
 function love.draw()
 	os.execute("clear")
-	print(Game.score)
+	print(Game.arena.score)
 	Game.arena:draw(5, 5)
 	Game.block:draw(5, 5)
 end

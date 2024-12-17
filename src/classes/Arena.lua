@@ -10,15 +10,17 @@ function Arena.__index(_, key)
 end
 
 setmetatable(Arena, {
-	__call = function(cls, width, height, mat)
-		return cls.new(width, height, mat)
+	__call = function(cls, width, height, score_multiply, mat)
+		return cls.new(width, height, score_multiply, mat)
 	end,
 })
 
-function Arena.new(width, height, mat)
+function Arena.new(width, height, score_multiply, mat)
 	local self = setmetatable({}, Arena)
 
 	self.matrix = mat or matrix.new(width, height)
+	self.score_multiply = score_multiply or 10
+	self.score = 0
 
 	return self
 end
@@ -50,27 +52,16 @@ function Arena:merge(block)
 	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y + UP)
 end
 
-function Arena:getClearLines()
-	local lines = {}
-	local count = 0
+function Arena:clearLines()
 	for i = 1, #self.matrix do
 		if not tables.include(self.matrix[i], 0) then
-			lines[count] = i
-			count = count + 1
+			tables.set(self.matrix[i], 0)
+			Arena.moveDown(self.matrix, i)
+			self.score = self.score + self.score_multiply
 		end
 	end
-	return lines
 end
-
-function Arena:clearLines(lines, score, multiply)
-	for i = 1, #lines do
-		local line = lines[i]
-		tables.set(self.matrix[line], 0)
-		Arena.moveDown(self.matrix, line)
-		score = score + multiply
-	end
-end
-
 function Arena:reset()
 	matrix.set(self.matrix, 0)
+	self.score = 0
 end
