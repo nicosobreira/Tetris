@@ -84,15 +84,17 @@ function Block:draw(tx, ty)
 	end
 end
 
-function Block:isOverlapping(arena_matrix)
-	return matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y)
-end
-
 function Block:onOverlap(arena)
 	arena:merge(self)
 	arena:clearLines()
 	if self:isGameOver(arena.matrix) then
 		arena:reset()
+	end
+end
+
+function Block:isOverlapping(arena)
+	if matrix.isOverlapping(self.matrix, arena.matrix, self.pos.x, self.pos.y) then
+		self:onOverlap(arena)
 	end
 end
 
