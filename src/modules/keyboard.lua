@@ -1,31 +1,31 @@
 require("constants.directions")
 
 local BLOCK = {
-	a = function(block, arena_matrix)
-		block:goHorizontal(LEFT, arena_matrix)
+	a = function(block, arena)
+		block:goHorizontal(LEFT, arena)
 	end,
-	d = function(block, arena_matrix)
-		block:goHorizontal(RIGHT, arena_matrix)
+	d = function(block, arena)
+		block:goHorizontal(RIGHT, arena)
 	end,
-	s = function(block, arena_matrix)
-		block:goVertical(DOWN, arena_matrix)
+	s = function(block, arena)
+		block:goVertical(DOWN, arena)
 	end,
-	w = function(block, arena_matrix)
-		block:goForceVertical(DOWN, arena_matrix)
+	w = function(block, arena)
+		block:goForceVertical(DOWN, arena)
 	end,
-	e = function(block, arena_matrix)
-		block:rotate(CLOCKWISE, arena_matrix)
+	e = function(block, arena)
+		block:rotate(CLOCKWISE, arena)
 	end,
-	q = function(block, arena_matrix)
-		block:rotate(COUNTERCLOCKWISE, arena_matrix)
+	q = function(block, arena)
+		block:rotate(COUNTERCLOCKWISE, arena)
 	end,
 }
 
 local K = {}
 
-function K.blockIsDown(key, block, arena_matrix)
+function K.blockIsDown(key, block, arena)
 	if BLOCK[key] ~= nil then
-		BLOCK[key](block, arena_matrix)
+		BLOCK[key](block, arena)
 	end
 end
 
