@@ -40,8 +40,7 @@ function love.keypressed(key)
 end
 
 function love.update()
-	if Game.block:isOverlapping(Game.arena.matrix) then
-	end
+	Game.block:isOverlapping(Game.arena.matrix)
 	Game.block:fall(Block_fall_speed)
 end
 
