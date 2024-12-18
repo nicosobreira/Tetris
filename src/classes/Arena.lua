@@ -10,17 +10,18 @@ function Arena.__index(_, key)
 end
 
 setmetatable(Arena, {
-	__call = function(cls, width, height, multiply, fall_speed)
-		return cls.new(width, height, multiply, fall_speed)
+	__call = function(cls, width, height, multiply, fall_speed, score_for_fall)
+		return cls.new(width, height, multiply, fall_speed, score_for_fall)
 	end,
 })
 
-function Arena.new(width, height, multiply, fall_speed)
+function Arena.new(width, height, multiply, fall_speed, score_for_fall)
 	local self = setmetatable({}, Arena)
 
 	self.matrix = matrix.new(width, height)
 	self.multiply = multiply
 	self.fall_speed = fall_speed
+	self.score_for_fall = score_for_fall
 	self.score = 0
 
 	return self
