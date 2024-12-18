@@ -14,6 +14,7 @@ require("classes.Arena")
 --[ TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
 --]
+
 local function getOs()
 	local name
 	-- Unix, Linux variants
@@ -21,6 +22,10 @@ local function getOs()
 	name = fh:read()
 
 	return name or "Windows"
+end
+
+function love.conf(t)
+	t.version = "11.5"
 end
 
 function love.load()
