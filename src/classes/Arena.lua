@@ -40,6 +40,7 @@ function Arena:draw(tx, ty)
 	ty = ty or 0
 	local to_draw_pos_x = tx * CELLSIZE
 	local to_draw_pos_y = ty * CELLSIZE
+	print(self.score)
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do

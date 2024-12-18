@@ -4,28 +4,38 @@ require("classes.Block")
 require("classes.Arena")
 
 --[ TODO(s) Game
---1 Fazer com que se ganhe pontos depois de uma linha ser limpada
---2 Detectar o estado de Game Over
---3 Depois que perder o jogo precisa reiniciar
---4 A dificultade (velocidade da queda dos blocos) precisa aumentar
---5 Ao invés de usar sprites usar love2d draw rectangle com a cor
---6 Adicionar efeitos sonoros
+--1 Depois que perder o jogo precisa reiniciar
+--2 A dificultade (velocidade da queda dos blocos) precisa aumentar
+--3 Ao invés de usar sprites usar love2d draw rectangle com a cor
+--4 Adicionar efeitos sonoros
 --EXTRA Preciso criar um menu
 --]
 
 --[ TODO(s) Placar
 --1 Preciso de um placar que fique no meio da largura da arena
 --]
+local function getOs()
+	local name
+	-- Unix, Linux variants
+	local fh, _ = assert(io.popen("uname -o 2>/dev/null", "r"))
+	name = fh:read()
 
-Game = {}
+	return name or "Windows"
+end
 
 function love.load()
 	love.window.setTitle("Tetris")
 
 	math.randomseed(os.time())
+	if getOs() == "GNU/Linux" then
+		CLEAR = "clear"
+	else
+		CLEAR = "cls"
+	end
 
+	Game = {}
 	Game.arena = Arena(12, 20)
-	Game.block = Block(3, 3, SHAPES.i)
+	Game.block = Block(3, 3)
 end
 
 function love.keypressed(key)
@@ -36,15 +46,11 @@ function love.keypressed(key)
 end
 
 function love.update()
-	if Game.block:isOverlapping(Game.arena) then
-		Game.block:onOverlap(Game.arena)
-	end
 	Game.block:fall(Game.arena)
 end
 
 function love.draw()
-	os.execute("clear")
-	print(Game.arena.score)
+	os.execute(CLEAR)
 	Game.arena:draw(5, 5)
 	Game.block:draw(5, 5)
 end

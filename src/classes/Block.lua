@@ -37,6 +37,7 @@ function Block:onOverlap(arena)
 	arena:clearLines()
 	if self:isGameOver(arena.matrix) then
 		arena:reset()
+		self:reset()
 	end
 end
 
@@ -46,16 +47,12 @@ end
 
 function Block:goVertical(direction, arena_matrix)
 	self.pos.y = self.pos.y + direction
-	if self:isOverlapping(arena_matrix) then
-		self.pos.y = self.pos.y - direction
-	end
 end
 
 function Block:goForceVertical(direction, arena)
 	for _ = self.pos.y, #arena.matrix, direction do
 		self:goVertical(direction)
 		if self:isOverlapping(arena.matrix) then
-			self:goVertical(-direction)
 			self:onOverlap(arena)
 			break
 		end
@@ -82,7 +79,6 @@ function Block:fall(arena)
 		self.time_last_fall = love.timer.getTime()
 		self:goVertical(DOWN, arena.matrix)
 		if self:isOverlapping(arena.matrix) then
-			self:goVertical(UP, arena.matrix)
 			self:onOverlap(arena)
 		end
 	end
@@ -104,10 +100,14 @@ function Block:draw(tx, ty)
 	end
 end
 
-function Block:isGameOver(arena_matrix)
-	-- local tmp_matrix = Block.randomShape()
-	self.matrix = SHAPES.i
+function Block:reset()
+	self.matrix = Block.randomShape()
+	-- self.matrix = SHAPES.i
 	self.pos = { x = 5, y = 1 }
+end
+
+function Block:isGameOver(arena_matrix)
+	self:reset()
 	if matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y) then
 		return true
 	end

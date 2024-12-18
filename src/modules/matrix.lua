@@ -8,22 +8,20 @@ local M = {}
 ---@param height number
 function M.new(width, height)
 	local matrix = {}
-
 	for i = 1, height do
 		matrix[i] = {}
 		for j = 1, width do
 			matrix[i][j] = 0
 		end
 	end
-
 	return matrix
 end
 
 function M.print(matrix, sep)
 	sep = sep or " "
-	for _, line in ipairs(matrix) do
-		for _, element in ipairs(line) do
-			io.write(element .. sep)
+	for i = 1, #matrix do
+		for j = 1, #matrix[1] do
+			io.write(matrix[i][j] .. sep)
 		end
 		print()
 	end
@@ -55,10 +53,11 @@ function M.set(matrix, value)
 	end
 end
 
-function M.isOverlapping(matrix1, matrix2, x2, y2)
+function M.isOverlapping(matrix1, matrix2, x2, y2, value)
+	value = value or 0
 	for i = 1, #matrix1 do
 		for j = 1, #matrix1[i] do
-			if matrix1[i][j] ~= 0 and (matrix2[i + y2] and matrix2[i + y2][j + x2]) ~= 0 then
+			if matrix1[i][j] ~= value and (matrix2[i + y2] and matrix2[i + y2][j + x2]) ~= value then
 				return true
 			end
 		end
