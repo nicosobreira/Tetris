@@ -39,7 +39,7 @@ function love.load()
 	end
 
 	Game = {}
-	Game.arena = Arena(12, 20)
+	Game.arena = Arena(12, 20, 10, 0.9)
 	Game.block = Block(3, 3)
 end
 
