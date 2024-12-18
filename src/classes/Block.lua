@@ -45,24 +45,28 @@ function Block:isOverlapping(arena_matrix)
 	return matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y)
 end
 
-function Block:goVertical(direction, arena_matrix)
-	self.pos.y = self.pos.y + direction
+function Block:goTo(axis, direction)
+	if axis == "x" then
+		self.pos.x = self.pos.x + direction
+	elseif axis == "y" then
+		self.pos.y = self.pos.y + direction
+	end
+end
+
+function Block:move(axis, direction, arena_matrix)
+	self:goTo(axis, direction)
+	if self:isOverlapping(arena_matrix) then
+		self:goTo(axis, -direction)
+	end
 end
 
 function Block:goForceVertical(direction, arena)
 	for _ = self.pos.y, #arena.matrix, direction do
-		self:goVertical(direction)
+		self:goTo("y", direction)
 		if self:isOverlapping(arena.matrix) then
 			self:onOverlap(arena)
 			break
 		end
-	end
-end
-
-function Block:goHorizontal(direction, arena_matrix)
-	self.pos.x = self.pos.x + direction
-	if self:isOverlapping(arena_matrix) then
-		self.pos.x = self.pos.x - direction
 	end
 end
 
@@ -77,7 +81,7 @@ function Block:fall(arena)
 	local time_current = love.timer.getTime() - self.time_last_fall
 	if time_current >= arena.fall_speed then
 		self.time_last_fall = love.timer.getTime()
-		self:goVertical(DOWN, arena.matrix)
+		self:goTo("y", DOWN)
 		if self:isOverlapping(arena.matrix) then
 			self:onOverlap(arena)
 		end

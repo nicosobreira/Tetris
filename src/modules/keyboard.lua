@@ -2,13 +2,13 @@ require("constants.directions")
 
 local BLOCK = {
 	a = function(block, arena_matrix)
-		block:goHorizontal(LEFT, arena_matrix)
+		block:move("x", LEFT, arena_matrix)
 	end,
 	d = function(block, arena_matrix)
-		block:goHorizontal(RIGHT, arena_matrix)
+		block:move("x", RIGHT, arena_matrix)
 	end,
 	s = function(block, arena_matrix)
-		block:goVertical(DOWN, arena_matrix)
+		block:move("y", DOWN, arena_matrix)
 	end,
 	w = function(block, arena)
 		block:goForceVertical(DOWN, arena)
