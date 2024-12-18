@@ -84,6 +84,20 @@ function Block:fall(arena)
 	end
 end
 
+function Block:reset()
+	self.matrix = Block.randomShape()
+	-- self.matrix = SHAPES.i
+	self.pos = { x = 5, y = 1 }
+end
+
+function Block:isGameOver(arena_matrix)
+	self:reset()
+	if matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y) then
+		return true
+	end
+	return false
+end
+
 function Block:draw(tx, ty)
 	tx = tx or 0
 	ty = ty or 0
@@ -98,18 +112,4 @@ function Block:draw(tx, ty)
 			end
 		end
 	end
-end
-
-function Block:reset()
-	self.matrix = Block.randomShape()
-	-- self.matrix = SHAPES.i
-	self.pos = { x = 5, y = 1 }
-end
-
-function Block:isGameOver(arena_matrix)
-	self:reset()
-	if matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y) then
-		return true
-	end
-	return false
 end
