@@ -4,11 +4,10 @@ require("classes.Block")
 require("classes.Arena")
 
 --[ TODO(s) Game
---1 Depois que perder o jogo precisa reiniciar
 --2 A dificultade (velocidade da queda dos blocos) precisa aumentar
 --3 Ao invés de usar sprites usar love2d draw rectangle com a cor
 --4 Adicionar efeitos sonoros
---EXTRA Preciso criar um menu
+--5 Preciso criar um menu
 --]
 
 --[ TODO(s) Placar
@@ -56,6 +55,6 @@ end
 
 function love.draw()
 	os.execute(CLEAR)
-	Game.arena:draw(5, 5)
-	Game.block:draw(5, 5)
+	Game.arena:draw()
+	Game.block:draw()
 end
