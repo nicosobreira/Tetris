@@ -2,11 +2,11 @@
 
 ## TODO
 
-- [] Create menu and interface;
-- [] Add sound effects;
-- [] The game velocity need to be increment depending on the score;
-- [] The score need to be render in the middle of the arena.
-- [] Remove "floating numbers" in functions, and put then in variables
+- [ ] Create menu and interface;
+- [ ] Add sound effects;
+- [ ] The game velocity need to be increment depending on the score;
+- [ ] The score need to be render in the middle of the arena.
+- [ ] Remove "floating numbers" in functions, and put then in variables
 
 ### EXTRA
 
