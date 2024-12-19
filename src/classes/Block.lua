@@ -102,8 +102,6 @@ end
 function Block:draw(tx, ty)
 	tx = tx or 0
 	ty = ty or 0
-	local to_draw_pos_x = (tx + self.pos.x) * CELLSIZE
-	local to_draw_pos_y = (ty + self.pos.y) * CELLSIZE
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
@@ -112,10 +110,10 @@ function Block:draw(tx, ty)
 				draw.rectangle(
 					"fill",
 					COLORS[color],
-					to_draw_pos_x + (CELLSIZE * j),
-					to_draw_pos_y + (CELLSIZE * i),
+					tx + (self.pos.x + j) * CELLSIZE,
+					ty + (self.pos.y + i) * CELLSIZE,
 					CELLSIZE,
-					CELLSIZE,
+					CELLSIZE
 				)
 			end
 		end

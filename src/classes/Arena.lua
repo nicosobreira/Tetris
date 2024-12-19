@@ -57,22 +57,13 @@ end
 function Arena:draw(tx, ty)
 	tx = tx or 0
 	ty = ty or 0
-	local to_draw_x = tx * CELLSIZE
-	local to_draw_y = ty * CELLSIZE
 	print(self.score)
 	print(self.fall_speed)
 	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1
-			draw.rectangle(
-				"fill",
-				COLORS[color],
-				to_draw_x + (CELLSIZE * j),
-				to_draw_y + (CELLSIZE * i),
-				CELLSIZE,
-				CELLSIZE,
-			)
+			draw.rectangle("fill", COLORS[color], tx + j * CELLSIZE, ty + i * CELLSIZE, CELLSIZE, CELLSIZE)
 		end
 	end
 end
