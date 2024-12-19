@@ -10,7 +10,7 @@
 
 ### EXTRA
 
-- [] Use `love.graphics.retangle()` instead of `sprites`.
+- [x] Use `love.graphics.retangle()` instead of `sprites`.
 
 ## MAYBE
 
