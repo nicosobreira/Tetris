@@ -1,4 +1,4 @@
-local love = require("love")
+_G.love = require("love")
 local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
@@ -19,12 +19,9 @@ else
 	CLEAR = "clear"
 end
 
-function love.conf(t)
-	t.version = "11.5"
-end
-
 function love.load()
 	love.window.setTitle("Tetris")
+	love.keyboard.setKeyRepeat(true)
 
 	math.randomseed(os.time())
 
@@ -32,8 +29,8 @@ function love.load()
 	Game.arena = Arena(12, 20, 10, 1, 50)
 	Game.block = Block(3, 3)
 end
-
-function love.keypressed(key)
+-- key, scancode, isrepeat
+function love.keypressed(key, _, _)
 	keyboard.blockIsDown(key, Game.block, Game.arena)
 	if key == "escape" then
 		love.event.quit()
@@ -46,8 +43,8 @@ end
 
 function love.draw()
 	os.execute(CLEAR)
-	Game.arena:draw()
-	Game.block:draw()
+	Game.arena:draw(5, 5)
+	Game.block:draw(5, 5)
 end
 
 function love.run()
@@ -56,9 +53,9 @@ function love.run()
 	end
 
 	local current = 0
-	local previuos = love.timer.getTime()
 	local elapsed = 0
 	local lag = 0.0
+	local previous = love.timer.getTime()
 
 	-- Main loop time.
 	return function()
@@ -77,11 +74,10 @@ function love.run()
 
 		-- Call update and draw
 		current = love.timer.getTime()
-		elapsed = current - previuos
-		previuos = current
+		elapsed = current - previous
+		previous = current
 		lag = lag + elapsed
 
-		love.keypressed()
 		while lag >= MS_PER_FRAME do
 			if love.update then
 				love.update()
