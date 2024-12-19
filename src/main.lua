@@ -26,8 +26,8 @@ function love.load()
 	math.randomseed(os.time())
 
 	Game = {}
-	Game.arena = Arena(12, 20, 10, 1, 50)
-	Game.block = Block(3, 3)
+	Game.arena = Arena.new(12, 20, 10, 1, 50)
+	Game.block = Block.new(3, 3)
 end
 -- key, scancode, isrepeat
 function love.keypressed(key, _, _)

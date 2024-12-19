@@ -6,12 +6,6 @@ require("constants.sprites")
 
 Block = {}
 
-setmetatable(Block, {
-	__call = function(cls, x, y, shape)
-		return cls.new(x, y, shape)
-	end,
-})
-
 function Block.__index(_, key)
 	return Block[key]
 end

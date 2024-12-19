@@ -8,12 +8,6 @@ function Arena.__index(_, key)
 	return Arena[key]
 end
 
-setmetatable(Arena, {
-	__call = function(cls, width, height, multiply, fall_speed, score_for_fall)
-		return cls.new(width, height, multiply, fall_speed, score_for_fall)
-	end,
-})
-
 function Arena.new(width, height, multiply, fall_speed, score_for_fall)
 	local self = setmetatable({}, Arena)
 
