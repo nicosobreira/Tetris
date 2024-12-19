@@ -71,7 +71,7 @@ function Arena:draw(tx, ty)
 				to_draw_x + (CELLSIZE * j),
 				to_draw_y + (CELLSIZE * i),
 				CELLSIZE,
-				CELLSIZE
+				CELLSIZE,
 			)
 		end
 	end

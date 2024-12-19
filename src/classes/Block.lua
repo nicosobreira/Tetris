@@ -115,7 +115,7 @@ function Block:draw(tx, ty)
 					to_draw_pos_x + (CELLSIZE * j),
 					to_draw_pos_y + (CELLSIZE * i),
 					CELLSIZE,
-					CELLSIZE
+					CELLSIZE,
 				)
 			end
 		end
