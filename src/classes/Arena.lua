@@ -1,6 +1,8 @@
 local matrix = require("modules.matrix")
 local tables = require("modules.tables")
+local draw = require("modules.draw")
 require("constants.cellsize")
+require("constants.colors")
 
 Arena = {}
 
@@ -63,7 +65,14 @@ function Arena:draw(tx, ty)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1
-			love.graphics.draw(COLORS[color], to_draw_x + (CELLSIZE * j), to_draw_y + (CELLSIZE * i))
+			draw.rectangle(
+				"fill",
+				COLORS[color],
+				to_draw_x + (CELLSIZE * j),
+				to_draw_y + (CELLSIZE * i),
+				CELLSIZE,
+				CELLSIZE
+			)
 		end
 	end
 end

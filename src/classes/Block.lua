@@ -1,8 +1,9 @@
 local matrix = require("modules.matrix")
+local draw = require("modules.draw")
 require("constants.shapes")
 require("constants.cellsize")
 require("constants.directions")
-require("constants.sprites")
+require("constants.colors")
 
 Block = {}
 
@@ -108,7 +109,14 @@ function Block:draw(tx, ty)
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1
 			if color ~= 1 then
-				love.graphics.draw(COLORS[color], to_draw_pos_x + (CELLSIZE * j), to_draw_pos_y + (CELLSIZE * i))
+				draw.rectangle(
+					"fill",
+					COLORS[color],
+					to_draw_pos_x + (CELLSIZE * j),
+					to_draw_pos_y + (CELLSIZE * i),
+					CELLSIZE,
+					CELLSIZE
+				)
 			end
 		end
 	end
