@@ -35,6 +35,9 @@ end
 function Block:onOverlap(arena)
 	arena:merge(self)
 	arena:clearLines()
+	if arena.score >= arena.score_for_fall then
+		arena:decreaseVelocity()
+	end
 	if self:isGameOver(arena.matrix) then
 		arena:reset()
 		self:reset()
