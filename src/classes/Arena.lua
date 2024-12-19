@@ -1,4 +1,3 @@
-local love = require("love")
 local matrix = require("modules.matrix")
 local tables = require("modules.tables")
 require("constants.cellsize")
@@ -67,7 +66,6 @@ function Arena:draw(tx, ty)
 	print(self.score)
 	print(self.fall_speed)
 	matrix.print(self.matrix)
-	love.graphics.printf(tostring(self.score), to_draw_x, to_draw_y, #self.matrix[1] * CELLSIZE + to_draw_x, "center")
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1

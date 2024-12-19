@@ -1,4 +1,3 @@
-local love = require("love")
 local matrix = require("modules.matrix")
 require("constants.shapes")
 require("constants.cellsize")
