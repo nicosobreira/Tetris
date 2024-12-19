@@ -5,7 +5,6 @@ function D.rectangle(mode, color, x, y, width, height, scale)
 	scale = scale or 1
 	love.graphics.setColor(color)
 	love.graphics.rectangle(mode, x, y, width * scale, height * scale)
-	-- love.graphics.setColor()
 end
 
 return D
