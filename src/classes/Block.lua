@@ -5,12 +5,16 @@ require("constants.cellsize")
 require("constants.directions")
 require("constants.colors")
 
+---@alias Block {pos:{x:number, y:number}, matrix: matrix, time_last_fall: number}
 Block = {}
 
 function Block.__index(_, key)
 	return Block[key]
 end
 
+---@param x number
+---@param y number
+---@param shape matrix
 function Block.new(x, y, shape)
 	local self = setmetatable({}, Block)
 
@@ -39,7 +43,7 @@ function Block:onOverlap(arena)
 end
 
 function Block:isOverlapping(arena_matrix)
-	return matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y)
+	return matrix.isOverlapping(self.matrix, arena_matrix, self.pos.x, self.pos.y, 0)
 end
 
 function Block:goTo(axis, direction)
@@ -110,8 +114,8 @@ function Block:draw(tx, ty)
 				draw.rectangle(
 					"fill",
 					COLORS[color],
-					tx + (self.pos.x + j) * CELLSIZE,
-					ty + (self.pos.y + i) * CELLSIZE,
+					tx + (self.pos.x + (j - 1)) * CELLSIZE,
+					ty + (self.pos.y + (i - 1)) * CELLSIZE,
 					CELLSIZE,
 					CELLSIZE
 				)
