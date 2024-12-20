@@ -5,11 +5,14 @@ require("constants.directions")
 ---@alias matrix table<number, table<number>>
 local M = {}
 
+---Creates a matrix.
 ---@param width number
 ---@param height number
 ---@return matrix
 function M.new(width, height)
 	local matrix = {}
+	assert(width >= 1)
+	assert(height >= 1)
 	for i = 1, height do
 		matrix[i] = {}
 		for j = 1, width do
@@ -19,8 +22,9 @@ function M.new(width, height)
 	return matrix
 end
 
+---Print the content of a matrix.
 ---@param matrix matrix
----@param sep string
+---@param sep string (default is " ")
 function M.print(matrix, sep)
 	sep = sep or " "
 	for i = 1, #matrix do
@@ -32,6 +36,7 @@ function M.print(matrix, sep)
 	print()
 end
 
+---Transpose a matrix.
 ---@param matrix matrix
 function M.transpose(matrix)
 	local tmp
@@ -44,6 +49,7 @@ function M.transpose(matrix)
 	end
 end
 
+---Reverse each line in a matrix.
 ---@param matrix matrix
 function M.reverseLine(matrix)
 	for i, _ in pairs(matrix) do
@@ -51,6 +57,7 @@ function M.reverseLine(matrix)
 	end
 end
 
+---Set all elements in a matrix to a value.
 ---@param matrix matrix
 ---@param value number
 function M.set(matrix, value)
@@ -61,17 +68,18 @@ function M.set(matrix, value)
 	end
 end
 
+---Check if matrix 1 is overlapping with matrix 2.
 ---@param matrix1 matrix
 ---@param matrix2 matrix
----@param x2 number
----@param y2 number
+---@param x1 number
+---@param y1 number
 ---@param value number value to detect overlap (default is 0)
 ---@return boolean if matrix 1 in in matrix 2
-function M.isOverlapping(matrix1, matrix2, x2, y2, value)
+function M.isOverlapping(matrix1, matrix2, x1, y1, value)
 	value = value or 0
 	for i = 1, #matrix1 do
 		for j = 1, #matrix1[i] do
-			if matrix1[i][j] ~= value and (matrix2[i + y2] and matrix2[i + y2][j + x2]) ~= value then
+			if matrix1[i][j] ~= value and (matrix2[i + y1] and matrix2[i + y1][j + x1]) ~= value then
 				return true
 			end
 		end
@@ -79,6 +87,7 @@ function M.isOverlapping(matrix1, matrix2, x2, y2, value)
 	return false
 end
 
+---Rotate matrix 90º or -90º.
 ---@param direction number
 ---@param matrix matrix
 function M.rotate(direction, matrix)
@@ -91,17 +100,18 @@ function M.rotate(direction, matrix)
 	end
 end
 
+---Merge matrix 2 into matrix 1.
 ---@param matrix1 matrix to be merge
 ---@param matrix2 matrix will be merged
----@param x number x to merge in matrix 1
----@param y number y to merge in matrix 1
-function M.merge(matrix1, matrix2, x, y)
-	x = x or 0
-	y = y or 0
+---@param x2 number x to merge in matrix 1 (default is 0)
+---@param y2 number y to merge in matrix 1 (default is 0)
+function M.merge(matrix1, matrix2, x2, y2)
+	x2 = x2 or 0
+	y2 = y2 or 0
 	for i, line in ipairs(matrix2) do
 		for j, element2 in ipairs(line) do
-			if element2 ~= 0 and (i + y <= #matrix1 and j + x <= #matrix1[1]) then
-				matrix1[i + y][j + x] = element2
+			if element2 ~= 0 and (i + y2 <= #matrix1 and j + x2 <= #matrix1[1]) then
+				matrix1[i + y2][j + x2] = element2
 			end
 		end
 	end

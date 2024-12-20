@@ -5,13 +5,14 @@ require("constants.cellsize")
 require("constants.directions")
 require("constants.colors")
 
----@alias Block {pos:{x:number, y:number}, matrix: matrix, time_last_fall: number}
+---@alias Block {pos: {x:number, y:number}, matrix: matrix, time_last_fall: number}
 Block = {}
 
 function Block.__index(_, key)
 	return Block[key]
 end
 
+---Create a new Block.
 ---@param x number
 ---@param y number
 ---@param shape matrix

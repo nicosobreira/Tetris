@@ -24,6 +24,8 @@ function Arena.new(width, height)
 	return self
 end
 
+---@param mat matrix
+---@param finish number
 function Arena.moveDown(mat, finish)
 	for i = finish - 1, 1, -1 do
 		local tmp = mat[i]
@@ -33,6 +35,7 @@ function Arena.moveDown(mat, finish)
 	tables.set(mat[1], 0)
 end
 
+---@param block Block
 function Arena:merge(block)
 	matrix.merge(self.matrix, block.matrix, block.pos.x, block.pos.y + UP)
 end
