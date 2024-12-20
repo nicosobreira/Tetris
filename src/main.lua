@@ -4,7 +4,7 @@ require("classes.Block")
 require("classes.Arena")
 
 FPS = 60
-MS_PER_FRAME = FPS / 3600
+MS_PER_FRAME = 1 / FPS
 
 local function getOs()
 	local fh = assert(io.popen("uname -o 2>/dev/null", "r"))
@@ -43,8 +43,10 @@ end
 
 function love.draw()
 	os.execute(CLEAR)
-	Game.arena:draw(5, 5)
-	Game.block:draw(5, 5)
+	local width = 0
+	local height = 0
+	Game.arena:draw(width, height)
+	Game.block:draw(width, height)
 end
 
 function love.run()
