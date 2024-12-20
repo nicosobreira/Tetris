@@ -1,5 +1,6 @@
 # Custom
 *.vim
+Session*
 .vscode
 
 # Compiled Lua sources
