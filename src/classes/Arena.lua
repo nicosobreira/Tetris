@@ -10,15 +10,16 @@ function Arena.__index(_, key)
 	return Arena[key]
 end
 
-function Arena.new(width, height, multiply, fall_speed, score_for_fall)
+---@alias Arena {width: number, height:number}
+function Arena.new(width, height)
 	local self = setmetatable({}, Arena)
 
 	self.matrix = matrix.new(width, height)
-	self.multiply = multiply
-	self.fall_speed = fall_speed
-	self.score_for_fall = score_for_fall
-	self.score = 0
-	self.score_update = 0
+	-- self.multiply = multiply
+	-- self.fall_speed = fall_speed
+	-- self.score_for_fall = score_for_fall
+	-- self.score = 0
+	-- self.score_update = 0
 
 	return self
 end
@@ -63,7 +64,7 @@ function Arena:draw(tx, ty)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1
-			draw.rectangle("fill", COLORS[color], tx + j * CELLSIZE, ty + i * CELLSIZE, CELLSIZE, CELLSIZE)
+			draw.rectangle("fill", COLORS[color], tx + (j - 1) * CELLSIZE, ty + (i - 1) * CELLSIZE, CELLSIZE, CELLSIZE)
 		end
 	end
 end
