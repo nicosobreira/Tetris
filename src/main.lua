@@ -2,6 +2,9 @@ _G.love = require("love")
 local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
+require("classes.Game")
+
+---@alias vector { x: number, y: number }
 
 FPS = 60
 MS_PER_FRAME = 1 / FPS
@@ -18,37 +21,33 @@ if getOs() == "Windows" then
 else
 	CLEAR = "clear"
 end
-
 function love.load()
 	love.window.setTitle("Tetris")
 	love.keyboard.setKeyRepeat(true)
 
 	math.randomseed(os.time())
-
-	Game = {}
-	Game.arena = Arena.new(12, 20, 10, 1, 50)
-	Game.block = Block.new(3, 3)
+	local block = Block.new(3, 3)
+	local arena = Arena.new(12, 20)
+	Player = Game.new(block, arena, 0, 0, 50, 10, 1, keyboard.maps)
 end
--- key, scancode, isrepeat
+
+--- key, scancode, isrepeat
 function love.keypressed(key, _, _)
-	keyboard.blockIsDown(key, Game.block, Game.arena)
+	Game:onKeyDown(key)
 	if key == "escape" then
 		love.event.quit()
 	end
 end
 
 function love.update()
-	Game.block:fall(Game.arena)
+	Player:update()
 end
 
 function love.draw()
-	os.execute(CLEAR)
-	local width = 0
-	local height = 0
-	Game.arena:draw(width, height)
-	Game.block:draw(width, height)
+	Player:draw()
 end
 
+---Main game loop.
 function love.run()
 	if love.load then
 		love.load()
@@ -56,7 +55,7 @@ function love.run()
 
 	local current = 0
 	local elapsed = 0
-	local lag = 0.0
+	local lag = 0
 	local previous = love.timer.getTime()
 
 	-- Main loop time.

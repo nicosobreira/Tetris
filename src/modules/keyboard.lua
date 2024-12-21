@@ -1,36 +1,26 @@
 require("constants.directions")
 
-local BLOCK = {
-	a = function(block, arena_matrix)
-		block:move("x", LEFT, arena_matrix)
-	end,
-	d = function(block, arena_matrix)
-		block:move("x", RIGHT, arena_matrix)
-	end,
-	s = function(block, arena_matrix)
-		block:move("y", DOWN, arena_matrix)
-	end,
-	w = function(block, arena)
-		block:goForceVertical(DOWN, arena)
-	end,
-	e = function(block, arena_matrix)
-		block:rotate(CLOCKWISE, arena_matrix)
-	end,
-	q = function(block, arena_matrix)
-		block:rotate(COUNTERCLOCKWISE, arena_matrix)
-	end,
-}
+---@module "keyboard"
+
+---@alias Key string
+---@alias Keyboard {menu: table<string, Key>, game: table<string, Key>}
 
 local K = {}
 
-function K.blockIsDown(key, block, arena)
-	if BLOCK[key] ~= nil then
-		if key == "w" then
-			BLOCK[key](block, arena)
-		else
-			BLOCK[key](block, arena.matrix)
-		end
-	end
-end
+---@type Keyboard
+K.maps = {
+	menu = {
+		quit = "q",
+		restart = "r",
+	},
+	game = {
+		left = "a",
+		right = "d",
+		down = "s",
+		force_down = "w",
+		rotate_clock = "e",
+		rotate_counter_clock = "q",
+	},
+}
 
 return K

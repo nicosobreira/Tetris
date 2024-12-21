@@ -2,12 +2,15 @@ local tables = require("modules.tables")
 require("constants.cellsize")
 require("constants.directions")
 
----@alias matrix table<number, table<number>>
+---@module "Matrix"
+
+---@alias matrix table[integer[]]
+
 local M = {}
 
 ---Creates a matrix.
----@param width number
----@param height number
+---@param width integer
+---@param height integer
 ---@return matrix
 function M.new(width, height)
 	local matrix = {}
@@ -24,7 +27,7 @@ end
 
 ---Print the content of a matrix.
 ---@param matrix matrix
----@param sep string (default is " ")
+---@param sep string? (default is " ")
 function M.print(matrix, sep)
 	sep = sep or " "
 	for i = 1, #matrix do
@@ -49,7 +52,7 @@ function M.transpose(matrix)
 	end
 end
 
----Reverse each line in a matrix.
+---Reverse the order of each line in a matrix.
 ---@param matrix matrix
 function M.reverseLine(matrix)
 	for i, _ in pairs(matrix) do
@@ -59,7 +62,7 @@ end
 
 ---Set all elements in a matrix to a value.
 ---@param matrix matrix
----@param value number
+---@param value integer
 function M.set(matrix, value)
 	for i = 1, #matrix do
 		for j = 1, #matrix[i] do
@@ -71,9 +74,9 @@ end
 ---Check if matrix 1 is overlapping with matrix 2.
 ---@param matrix1 matrix
 ---@param matrix2 matrix
----@param x1 number
----@param y1 number
----@param value number value to detect overlap (default is 0)
+---@param x1 integer
+---@param y1 integer
+---@param value integer? value to detect overlap (default is 0)
 ---@return boolean if matrix 1 in in matrix 2
 function M.isOverlapping(matrix1, matrix2, x1, y1, value)
 	value = value or 0
@@ -88,7 +91,7 @@ function M.isOverlapping(matrix1, matrix2, x1, y1, value)
 end
 
 ---Rotate matrix 90º or -90º.
----@param direction number
+---@param direction integer
 ---@param matrix matrix
 function M.rotate(direction, matrix)
 	if direction == CLOCKWISE then
@@ -101,10 +104,10 @@ function M.rotate(direction, matrix)
 end
 
 ---Merge matrix 2 into matrix 1.
----@param matrix1 matrix to be merge
----@param matrix2 matrix will be merged
----@param x2 number x to merge in matrix 1 (default is 0)
----@param y2 number y to merge in matrix 1 (default is 0)
+---@param matrix1 matrix will be merged
+---@param matrix2 matrix to be merge
+---@param x2 integer? x to merge in matrix 1 (default is 0)
+---@param y2 integer? y to merge in matrix 1 (default is 0)
 function M.merge(matrix1, matrix2, x2, y2)
 	x2 = x2 or 0
 	y2 = y2 or 0
