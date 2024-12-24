@@ -1,17 +1,27 @@
-require("constants.directions")
-
 ---@module "keyboard"
 
----@alias Key string
----@alias Keyboard {menu: table<string, Key>, game: table<string, Key>}
+require("constants.directions")
 
-local K = {}
+---@alias key string a key [example "a"]
+---@alias action string a action name to be done when key is pressed
+---@alias bla {[action]: key}
 
----@type Keyboard
-K.maps = {
+local K = { modes = {}, maps = {} }
+
+K.modes = {
+	global = "global",
+	menu = "menu",
+	game = "game",
+}
+
+K.maps.wasd = {
+	global = {
+		switch_mode = "escape",
+	},
 	menu = {
-		quit = "q",
 		restart = "r",
+		quit = "q",
+		debug = "d",
 	},
 	game = {
 		left = "a",
@@ -20,6 +30,24 @@ K.maps = {
 		force_down = "w",
 		rotate_clock = "e",
 		rotate_counter_clock = "q",
+	},
+}
+
+K.maps.ijkl = {
+	global = {
+		switch_mode = "escape",
+	},
+	menu = {
+		restart = "r",
+		quit = "q",
+	},
+	game = {
+		left = "j",
+		right = "l",
+		down = "k",
+		force_down = "i",
+		rotate_clock = "o",
+		rotate_counter_clock = "u",
 	},
 }
 

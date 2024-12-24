@@ -1,8 +1,6 @@
 local matrix = require("modules.matrix")
 local draw = require("modules.draw")
 require("constants.shapes")
-require("constants.cellsize")
-require("constants.directions")
 require("constants.colors")
 
 ---Block.
@@ -41,9 +39,15 @@ function Block:drop()
 	self.pos.y = self.pos.y + DOWN
 end
 
-function Block:moveHorizontal(direction, arena_matrix)
+---Move the piece by one cell to the right
+---@param max_pos number the maximum value
+function Block:moveRight(max_pos)
+	self.pos.x = math.max(self.pos.x + RIGHT, max_pos)
+end
+
+function Block:moveHorizontal(direction, mat)
 	self.pos.x = self.pos.x + direction
-	if self:isOverlapping(arena_matrix) then
+	if self:isOverlapping(mat) then
 		self.pos.x = self.pos.x - direction
 	end
 end
@@ -57,23 +61,22 @@ function Block:rotate(direction, arena_matrix)
 	end
 end
 
----@param tx integer
----@param ty integer
-function Block:draw(tx, ty)
+---@param cellsize number the size per cell
+---@param tx? integer set x left corner to draw
+---@param ty? integer set y up corner to draw
+function Block:draw(cellsize, tx, ty)
 	tx = tx or 0
 	ty = ty or 0
-	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1
 			if color ~= 1 then
-				draw.rectangle(
+				draw.cell(
 					"fill",
 					COLORS[color],
-					tx + (self.pos.x + (j - 1)) * CELLSIZE,
-					ty + (self.pos.y + (i - 1)) * CELLSIZE,
-					CELLSIZE,
-					CELLSIZE
+					tx + (self.pos.x + (j - 1)) * cellsize,
+					ty + (self.pos.y + (i - 1)) * cellsize,
+					cellsize
 				)
 			end
 		end

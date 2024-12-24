@@ -1,3 +1,5 @@
+local love = require("love")
+
 local function setColors(rgbs)
 	local colors = {}
 	for i = 1, #rgbs do
@@ -15,6 +17,7 @@ local RGBS = {
 	{ 131, 118, 156 }, -- purple
 	{ 0, 228, 54 }, -- green
 	{ 255, 0, 77 }, -- red
+	{ 255, 241, 232 }, -- white
 }
 
 COLORS = setColors(RGBS)

@@ -1,5 +1,4 @@
 local tables = require("modules.tables")
-require("constants.cellsize")
 require("constants.directions")
 
 ---@module "Matrix"

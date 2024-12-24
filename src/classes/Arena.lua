@@ -1,7 +1,6 @@
 local matrix = require("modules.matrix")
 local tables = require("modules.tables")
 local draw = require("modules.draw")
-require("constants.cellsize")
 require("constants.colors")
 
 ---@class Arena
@@ -41,16 +40,16 @@ function Arena:merge(block)
 end
 
 ---Draw the arena.
----@param tx integer? set x left corner to draw
----@param ty integer? set y up corner to draw
-function Arena:draw(tx, ty)
+---@param cellsize number the size per cell
+---@param tx? integer set x left corner to draw
+---@param ty? integer set y up corner to draw
+function Arena:draw(cellsize, tx, ty)
 	tx = tx or 0
 	ty = ty or 0
-	matrix.print(self.matrix)
 	for i = 1, #self.matrix do
 		for j = 1, #self.matrix[i] do
 			local color = self.matrix[i][j] + 1
-			draw.rectangle("fill", COLORS[color], tx + (j - 1) * CELLSIZE, ty + (i - 1) * CELLSIZE, CELLSIZE, CELLSIZE)
+			draw.cell("fill", COLORS[color], tx + (j - 1) * cellsize, ty + (i - 1) * cellsize, cellsize)
 		end
 	end
 end

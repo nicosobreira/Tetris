@@ -1,14 +1,16 @@
-_G.love = require("love")
+local love = require("love")
 local keyboard = require("modules.keyboard")
 require("classes.Block")
 require("classes.Arena")
 require("classes.Game")
 
----@alias vector { x: number, y: number }
+---@class vector
+---@field x number
+---@field y number
 
-FPS = 60
-MS_PER_FRAME = 1 / FPS
+local FPS = 60
 
+---@return string Os name
 local function getOs()
 	local fh = assert(io.popen("uname -o 2>/dev/null", "r"))
 	local name = fh:read()
@@ -16,89 +18,54 @@ local function getOs()
 	return name or "Windows"
 end
 
-if getOs() == "Windows" then
-	CLEAR = "cls"
-else
-	CLEAR = "clear"
+---@return string clear command
+local function getClear()
+	if getOs() == "Windows" then
+		return "cls"
+	else
+		return "clear"
+	end
 end
+
+---@param height integer the number of cells that will be need
+---@param border? number the value for the empty space
+---@return number the new cell size
+local function getCellsize(height, border)
+	border = border or 1
+	local matrix_height = height
+	return (love.graphics.getHeight() / matrix_height) * border
+end
+
 function love.load()
-	love.window.setTitle("Tetris")
 	love.keyboard.setKeyRepeat(true)
 
 	math.randomseed(os.time())
-	local block = Block.new(3, 3)
-	local arena = Arena.new(12, 20)
-	Player = Game.new(block, arena, 0, 0, 50, 10, 1, keyboard.maps)
+	CLEAR = getClear()
+	Player = Game.new(Block.new(3, 3), Arena.new(10, 20), 50, 10, 1, keyboard.maps.wasd)
 end
 
---- key, scancode, isrepeat
-function love.keypressed(key, _, _)
-	Game:onKeyDown(key)
-	if key == "escape" then
-		love.event.quit()
-	end
+---@param key key
+function love.keypressed(key)
+	Player:onKeyPress(key)
 end
+
+local previous = love.timer.getTime()
+local lag = 0
+local MS_PER_FRAME = 1 / FPS
 
 function love.update()
-	Player:update()
+	local current = love.timer.getTime()
+	local elapsed = current - previous
+	previous = current
+	lag = lag + elapsed
+
+	while lag >= MS_PER_FRAME do
+		Player:update()
+		lag = lag - MS_PER_FRAME
+	end
 end
 
 function love.draw()
-	Player:draw()
-end
-
----Main game loop.
-function love.run()
-	if love.load then
-		love.load()
-	end
-
-	local current = 0
-	local elapsed = 0
-	local lag = 0
-	local previous = love.timer.getTime()
-
-	-- Main loop time.
-	return function()
-		-- Process events.
-		if love.event then
-			love.event.pump()
-			for name, a, b, c, d, e, f in love.event.poll() do
-				if name == "quit" then
-					if not love.quit or not love.quit() then
-						return a or 0
-					end
-				end
-				love.handlers[name](a, b, c, d, e, f)
-			end
-		end
-
-		-- Call update and draw
-		current = love.timer.getTime()
-		elapsed = current - previous
-		previous = current
-		lag = lag + elapsed
-
-		while lag >= MS_PER_FRAME do
-			if love.update then
-				love.update()
-			end
-			lag = lag - MS_PER_FRAME
-		end
-
-		if love.graphics and love.graphics.isActive() then
-			love.graphics.origin()
-			love.graphics.clear(love.graphics.getBackgroundColor())
-
-			if love.draw then
-				love.draw()
-			end
-
-			love.graphics.present()
-		end
-
-		if love.timer then
-			love.timer.sleep(0.001)
-		end
-	end
+	local cellsize = getCellsize(#Player.arena.matrix, 0.6)
+	Player:draw(cellsize, CLEAR)
 end

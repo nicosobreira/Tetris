@@ -1,3 +1,4 @@
+vim.api.nvim_get_buffer_lines()
 local matrix = require("modules.matrix")
 require("classes.Arena")
 

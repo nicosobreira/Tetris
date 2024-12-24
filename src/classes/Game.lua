@@ -1,109 +1,161 @@
-local tables = require("modules.tables")
+local love = require("love")
+local draw = require("modules.draw")
 local matrix = require("modules.matrix")
+local tables = require("modules.tables")
 require("constants.directions")
+require("constants.colors")
 
----@alias mode string
+local function printRecursive(value, ignore)
+	-- Default ignore table if not provided
+	ignore = ignore or {}
 
-local GAME = "game"
-local MENU = "menu"
+	-- Check if the value is in the ignore list
+	for _, ignoredValue in ipairs(ignore) do
+		if value == ignoredValue then
+			return
+		end
+	end
+
+	-- Check if the value is a table
+	if type(value) == "table" then
+		-- Print the table recursively
+		print("{")
+		for key, val in pairs(value) do
+			io.write("  " .. tostring(key) .. " = ")
+			printRecursive(val, ignore)
+		end
+		print("}")
+	-- Check if the value is a boolean
+	elseif type(value) == "boolean" then
+		print(value and "true" or "false")
+	-- Check if the value is a function
+	elseif type(value) == "function" then
+		print("function")
+	else
+		-- For all other types, just print the value
+		print(tostring(value))
+	end
+end
 
 ---@class Game
 ---@field block Block
 ---@field arena Arena
----@field pos vector
 ---@field score { multiply: number, for_decrease_speed: number, total: number, count: number }
----@field fall_speed number
----@field last_fall number
+---@field fall { speed: number, last: number, decrease_count: number, decrease_value: number }
 ---@field clear_lines integer
----@field keys Keyboard
----@field is_alive boolean
+---@field keys table
+---@field modes { alive: boolean, menu: boolean, debug: boolean }
 Game = {}
 
+---@param key number
 function Game.__index(_, key)
 	return Game[key]
-end
-
----@param is_alive boolean
----@return mode
-function Game.setKeyMode(is_alive)
-	if is_alive then
-		return GAME
-	else
-		return MENU
-	end
 end
 
 ---Create a new game.
 ---@param block Block
 ---@param arena Block
----@param x integer
----@param y integer
 ---@param score_raise_speed number
 ---@param score_multiply number
 ---@param fall_speed integer
----@param keys Keyboard
-function Game.new(block, arena, x, y, score_raise_speed, score_multiply, fall_speed, keys)
+---@param keys table
+function Game.new(block, arena, score_raise_speed, score_multiply, fall_speed, keys)
 	local self = setmetatable({}, Game)
 
 	self.block = block
 	self.arena = arena
-	self.pos = { x = x, y = y }
-	self.score_raise_speed = score_raise_speed
-	self.score_multiply = score_multiply
 	self.score = {
 		multiply = score_multiply,
 		for_decrease_speed = score_raise_speed,
 		total = 0,
 		count = 0,
 	}
-	self.fall_speed = fall_speed
+	self.fall = {
+		speed = fall_speed,
+		last = 0,
+		decrease_count = 0,
+		decrease_value = 0.1,
+	}
 	self.keys = keys
-	self.last_fall = 0
 	self.clear_lines = 0
-	self.is_alive = true
-	self.key_mode = Game.setKeyMode(self.is_alive)
+	self.modes = {
+		alive = true,
+		menu = false,
+		debug = false,
+	}
 
 	return self
 end
 
+-- FIX getMiddle...: Need to limit the amount
+
+---@param y number
+---@return number the top-left height in the middle
+function Game.getMiddleHeight(y)
+	local height = love.graphics.getHeight() / 2 - (y / 2)
+	return height
+end
+
+---@param x number
+---@return number the top-left width in the middle
+function Game.getMiddleWidth(x)
+	local width = love.graphics.getWidth() / 2 - (x / 2)
+	return width
+end
+
+-- FIX the game don't enter menu mode
 ---Updates the game
 function Game:update()
-	if self.is_alive then
-		self:fall()
-	else
-		-- self:openMenu()
+	if not self.modes.menu then
+		self:drop()
 	end
 end
 
 ---Draws the game.
-function Game:draw()
-	os.execute(CLEAR)
-	self.arena:draw(self.pos.x, self.pos.y)
-	self.block:draw(self.pos.x, self.pos.y)
-	self:debug()
-end
+function Game:draw(cellsize, clear)
+	-- Top left x and y values
+	cellsize = math.floor(cellsize)
+	local x = #self.arena.matrix[1] * cellsize
+	local y = #self.arena.matrix * cellsize
 
-function Game:debug()
-	for name, value in pairs(self) do
-		if type(value) ~= "function" then
-			io.write(name .. ": ")
-			if type(value) == "table" then
-				io.write("table")
-			elseif type(value) == "boolean" then
-				local bool = value and "true" or "false"
-				io.write(bool)
-			else
-				io.write(value)
-			end
-			io.write("\n")
+	-- Width and height
+	local width = math.floor(Game.getMiddleWidth(x))
+	local height = math.floor(Game.getMiddleHeight(y))
+
+	-- Print scale
+	local scale = math.floor(cellsize / 16)
+
+	os.execute(clear)
+	if self.modes.menu then
+		draw.printCenter("Menu mode", width, height, width + x, height + y, scale)
+		local count = 1
+		for description, key in pairs(self.keys.menu) do
+			local message = string.format("Press %s to %s", key:upper(), description:upper())
+			love.graphics.setColor(COLORS[9]) -- [9] = white
+			draw.print(message, width, height + cellsize * count, scale)
+			count = count + 1
 		end
+	else
+		self.arena:draw(cellsize, width, height)
+		self.block:draw(cellsize, width, height)
+	end
+	if self.modes.debug then
+		self:debug({ cellsize = cellsize })
 	end
 end
 
-function Game:fall()
-	local time_current = love.timer.getTime() - self.last_fall
-	if time_current >= self.fall_speed then
-		self.last_fall = love.timer.getTime()
+function Game:debug(info)
+	info = info or nil
+	matrix.print(self.arena.matrix)
+	matrix.print(self.block.matrix)
+	printRecursive(self, { self.block, self.arena, self.keys })
+	printRecursive(info)
+end
+
+function Game:drop()
+	local current_time = love.timer.getTime() - self.fall.last
+	if current_time >= self.fall.speed - self.fall.decrease_count * self.fall.decrease_value then
+		self.fall.last = love.timer.getTime()
 		self.block:drop()
 		if self.block:isOverlapping(self.arena.matrix) then
 			self:onOverlap()
@@ -111,21 +163,13 @@ function Game:fall()
 	end
 end
 
-function Game:isGameOver()
-	self.block:reset()
-	if self.block:isOverlapping(self.arena.matrix) then
-		return true
-	end
-	return false
-end
-
--- FIX The self.clear_lines will add to infinity, limit it!
+-- FIX When the clear_lines is 4 it never decrease
 function Game:sweep()
 	for i = 1, #self.arena.matrix do
 		if not tables.include(self.arena.matrix[i], 0) then
 			tables.set(self.arena.matrix[i], 0)
 			self.arena:moveDown(i)
-			self.clear_lines = self.clear_lines + 1
+			self.clear_lines = math.min(self.clear_lines + 1, 4)
 		end
 	end
 	if self.clear_lines >= 4 then
@@ -137,8 +181,8 @@ end
 
 -- FIX variables names
 function Game:decreaseVelocity()
-	if self.fall_speed > 0.2 then
-		self.fall_speed = self.fall_speed - 0.2
+	if self.fall.speed > 0.2 then
+		self.fall.decrease_count = self.fall.decrease_count + 1
 	end
 	self.score.for_decrease_speed = math.floor(self.score.for_decrease_speed * (1.5 + self.score.count / 2))
 	self.score.count = self.score.count + 1
@@ -150,9 +194,9 @@ function Game:onOverlap()
 	if self.score.total >= self.score.for_decrease_speed then
 		self:decreaseVelocity()
 	end
-	if self:isGameOver() then
-		self.is_alive = false
-		self.key_mode = Game.setKeyMode(self.is_alive)
+	self.block:reset()
+	if self.block:isOverlapping(self.arena.matrix) then
+		self.modes.alive = false
 	end
 end
 
@@ -161,48 +205,61 @@ function Game:reset()
 	self.block:reset()
 	self.arena:reset()
 	self.score.total = 0
-	self.is_alive = true
-	self.key_mode = Game.setKeyMode(self.is_alive)
+	self.score.count = 0
+	self.clear_lines = 0
+	self.fall.decrease_count = 0
+	self.modes.alive = true
+	self.modes.menu = false
 end
 
-function Game:keyPress()
-	for _, key in pairs(self.keys.game) do
-		if love.keyboard.isDown(key) then
-			self:onKeyDown(key)
-		end
+---@param key key
+function Game:onKeyPress(key)
+	self:globalKeypress(key)
+	if not self.modes.menu then
+		self:gameKeypress(key)
+	else
+		self:menuKeypress(key)
 	end
 end
 
--- FIX movement isn't working :(
----@param key Key
-function Game:onKeyDown(key)
-	if self.key_mode == GAME then
-		if key == self.keys.game.left then
-			self.block:moveHorizontal(LEFT, self.arena.matrix)
-		elseif key == self.keys.game.right then
-			self.block:moveHorizontal(RIGHT, self.arena.matrix)
-		elseif key == self.keys.game.down then
+function Game:globalKeypress(key)
+	if key == self.keys.global.switch_mode then
+		self.modes.menu = not self.modes.menu
+	end
+end
+
+---@param key key
+function Game:gameKeypress(key)
+	if key == self.keys.game.left then
+		self.block:moveHorizontal(LEFT, self.arena.matrix)
+	elseif key == self.keys.game.right then
+		self.block:moveHorizontal(RIGHT, self.arena.matrix)
+	elseif key == self.keys.game.down then
+		self.block:drop()
+		if self.block:isOverlapping(self.arena.matrix) then
+			self:onOverlap()
+		end
+	elseif key == self.keys.game.force_down then
+		for _ = self.block.pos.y, #self.arena.matrix, DOWN do
 			self.block:drop()
 			if self.block:isOverlapping(self.arena.matrix) then
 				self:onOverlap()
+				break
 			end
-		elseif key == self.keys.game.force_down then
-			for _ = self.block.pos.y, #self.arena.matrix, DOWN do
-				self.block:drop()
-				if self.block:isOverlapping(self.arena.matrix) then
-					self:onOverlap()
-					break
-				end
-			end
-		elseif key == self.keys.game.rotate_clock then
-			self.block:rotate(CLOCKWISE, self.arena.matrix)
-		elseif key == self.keys.game.rotate_counter_clock then
-			self.block:rotate(COUNTERCLOCKWISE, self.arena.matrix)
 		end
-	elseif self.key_mode == MENU then
-		if key == self.keys.menu.quit then
-			love.event.quit()
-		elseif key == self.keys.menu.restart then
-		end
+	elseif key == self.keys.game.rotate_clock then
+		self.block:rotate(CLOCKWISE, self.arena.matrix)
+	elseif key == self.keys.game.rotate_counter_clock then
+		self.block:rotate(COUNTERCLOCKWISE, self.arena.matrix)
+	end
+end
+
+function Game:menuKeypress(key)
+	if key == self.keys.menu.restart then
+		self:reset()
+	elseif key == self.keys.menu.quit then
+		love.event.quit(0)
+	elseif key == self.keys.menu.debug then
+		self.modes.debug = not self.modes.debug
 	end
 end
