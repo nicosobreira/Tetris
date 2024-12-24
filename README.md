@@ -2,11 +2,13 @@
 
 ## TODO
 
-- [ ] Create menu and interface;
+- [ ] Create main menu;
 - [ ] Add sound effects;
-- [ ] The game velocity need to be increment depending on the score;
-- [ ] The score need to be render in the middle of the arena.
-- [ ] Remove "floating numbers" in functions, and put then in variables
+- [x] The game velocity need to be increment depending on the score;
+- [ ] The score need to be render above the arena
+- [x] Remove "floating numbers" in functions, and put then in variables.
+- [ ] On sweep line make and animation to slow disaper
+- [ ] When lost make an animation with blocks falling
 
 ### EXTRA
 
@@ -14,4 +16,8 @@
 
 ## MAYBE
 
-- Every `Arena` have a `Block` inside, so instead of having the two separate group them **together**.
+- [x] Every `Arena` have a `Block` inside, so instead of having the two separate group them **together**.
+
+## FIX
+
+- [ ] Fix the modes change (alive, menu);
