@@ -1,4 +1,5 @@
 # Custom
+release/
 *.vim
 Session*
 .vscode
