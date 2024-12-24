@@ -4,6 +4,9 @@ release/
 Session*
 .vscode
 
+bin/*
+!bin/*.sh
+
 # Compiled Lua sources
 luac.out
 
