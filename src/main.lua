@@ -32,8 +32,7 @@ end
 ---@return number the new cell size
 local function getCellsize(height, border)
 	border = border or 1
-	local matrix_height = height
-	return (love.graphics.getHeight() / matrix_height) * border
+	return (love.graphics.getHeight() / height) * border
 end
 
 function love.load()
@@ -66,6 +65,6 @@ function love.update()
 end
 
 function love.draw()
-	local cellsize = getCellsize(#Player.arena.matrix, 0.6)
+	local cellsize = getCellsize(#Player.arena.matrix, 0.8)
 	Player:draw(cellsize, CLEAR)
 end

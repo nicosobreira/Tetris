@@ -26,8 +26,8 @@ K.maps.wasd = {
 	game = {
 		left = "a",
 		right = "d",
-		down = "s",
-		force_down = "w",
+		soft_drop = "s",
+		hard_drop = "w",
 		rotate_clock = "e",
 		rotate_counter_clock = "q",
 	},

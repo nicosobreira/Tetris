@@ -41,7 +41,7 @@ end
 ---@field block Block
 ---@field arena Arena
 ---@field score { multiply: number, for_decrease_speed: number, total: number, count: number }
----@field fall { speed: number, last: number, decrease_count: number, decrease_value: number }
+---@field fall { speed: number, last: number, decrease_count: number, decrease_value: number, limit: number }
 ---@field clear_lines integer
 ---@field keys table
 ---@field modes { alive: boolean, menu: boolean, debug: boolean }
@@ -75,6 +75,7 @@ function Game.new(block, arena, score_raise_speed, score_multiply, fall_speed, k
 		last = 0,
 		decrease_count = 0,
 		decrease_value = 0.1,
+		limit = 0.2,
 	}
 	self.keys = keys
 	self.clear_lines = 0
@@ -115,32 +116,32 @@ end
 function Game:draw(cellsize, clear)
 	-- Top left x and y values
 	cellsize = math.floor(cellsize)
-	local x = #self.arena.matrix[1] * cellsize
-	local y = #self.arena.matrix * cellsize
+	local width = #self.arena.matrix[1] * cellsize
+	local height = #self.arena.matrix * cellsize
 
 	-- Width and height
-	local width = math.floor(Game.getMiddleWidth(x))
-	local height = math.floor(Game.getMiddleHeight(y))
+	local x = Game.getMiddleWidth(width)
+	local y = Game.getMiddleHeight(height)
 
 	-- Print scale
 	local scale = math.floor(cellsize / 16)
 
-	os.execute(clear)
 	if self.modes.menu then
-		draw.printCenter("Menu mode", width, height, width + x, height + y, scale)
+		draw.print("Menu mode", x, y, scale)
 		local count = 1
 		for description, key in pairs(self.keys.menu) do
 			local message = string.format("Press %s to %s", key:upper(), description:upper())
-			love.graphics.setColor(COLORS[9]) -- [9] = white
-			draw.print(message, width, height + cellsize * count, scale)
+			draw.print(message, x, y + cellsize * count, scale)
 			count = count + 1
 		end
 	else
-		self.arena:draw(cellsize, width, height)
-		self.block:draw(cellsize, width, height)
+		self.arena:draw(cellsize, x, y)
+		self.block:draw(cellsize, x, y)
+		draw.printCenter("Score: " .. tostring(self.score.total), x, y, width, scale)
 	end
 	if self.modes.debug then
-		self:debug({ cellsize = cellsize })
+		os.execute(clear)
+		self:debug({ cellsize = cellsize, x = x, y = y, width = width, height = height })
 	end
 end
 
@@ -179,9 +180,11 @@ function Game:sweep()
 	end
 end
 
+function Game:updateScore() end
+
 -- FIX variables names
 function Game:decreaseVelocity()
-	if self.fall.speed > 0.2 then
+	if self.fall.speed > self.fall.limit then
 		self.fall.decrease_count = self.fall.decrease_count + 1
 	end
 	self.score.for_decrease_speed = math.floor(self.score.for_decrease_speed * (1.5 + self.score.count / 2))
@@ -234,12 +237,12 @@ function Game:gameKeypress(key)
 		self.block:moveHorizontal(LEFT, self.arena.matrix)
 	elseif key == self.keys.game.right then
 		self.block:moveHorizontal(RIGHT, self.arena.matrix)
-	elseif key == self.keys.game.down then
+	elseif key == self.keys.game.soft_drop then
 		self.block:drop()
 		if self.block:isOverlapping(self.arena.matrix) then
 			self:onOverlap()
 		end
-	elseif key == self.keys.game.force_down then
+	elseif key == self.keys.game.hard_drop then
 		for _ = self.block.pos.y, #self.arena.matrix, DOWN do
 			self.block:drop()
 			if self.block:isOverlapping(self.arena.matrix) then
